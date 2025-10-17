@@ -170,8 +170,11 @@ def create_skills_doc(folder_path, company, date, results, prompts):
         doc.add_heading("📄 GENERATED CONTENT", level=1)
 
     doc.add_heading("RESUME", level=2)
-    p1 = doc.add_paragraph("Dupliquer le CV Base sur Canva")
+    p1 = doc.add_paragraph("Dupliquer le CV Base sur Canva :")
     p1.add_run().add_break()
+    doc.add_paragraph(
+        "https://www.canva.com/design/DAGqB80W4ws/Ux_BjIm0NhGcFcCL3VQBoA/edit"
+    )
     doc.add_paragraph(f'→ Renommer la copie : "{company} - {date}"')
     doc.add_paragraph()
 

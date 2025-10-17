@@ -1,16 +1,17 @@
 ## Instructions
-Je vais te fournir une offre d’emploi. Sélectionne et organise les 4 soft skills les plus pertinentes parmi la liste ci-dessous, en fonction des attentes et priorités de l’employeur. 
 
-## Consignes strictes :
+Je vais te fournir une offre d’emploi. Sélectionne et organise les 4 soft skills les plus pertinentes parmi la liste ci-dessous, en fonction des attentes et priorités de l’employeur. 
+Consignes strictes :
 Ne réponds que par la liste des 4 soft skills sélectionnées et organisées par ordre de priorité, sans commentaire ni explication.
 Privilégie les compétences explicitement mentionnées ou sous-entendues dans l’offre d’emploi.
 
 ## Liste de soft skills
+
 Travail en groupe
 Curiosité et veille technologique
 Sensibilité UX/UI
 Capacité de rédaction et de synthèse
-DevOps
 Adaptabilité et apprentissage rapide
 Esprit d’analyse et de synthèse
 Initiative et proactivité
+Esprit entrepreneurial 
