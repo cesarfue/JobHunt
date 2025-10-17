@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // Send result back to popup via background
+        // Send result back to popup
         chrome.runtime.sendMessage({
           action: "JOB_RESULT",
           data: data,
@@ -28,9 +28,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           action: "JOB_RESULT",
           data: {
             status: "error",
-            message: err.message || "Network error",
+            message: "Cannot connect to backend. Is Flask running?",
           },
         });
       });
+
+    // Return true to indicate we'll send a response asynchronously
+    return true;
   }
 });
