@@ -1,39 +1,36 @@
+// Content script that runs on job pages
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action !== "EXPORT_JOB_OFFER") return;
+  if (message.action === "EXPORT_JOB_OFFER") {
+    const pageContent = document.body.innerText;
+    const pageTitle = document.title;
+    const pageUrl = window.location.href;
 
-  const url = window.location.href;
-  const title =
-    document.querySelector("h1")?.innerText || document.title || "offre_emploi";
-
-  // Try to get main content
-  let mainContent = document.querySelector("main, article")?.innerText;
-  if (!mainContent) mainContent = document.body.innerText;
-
-  // Send to local Python backend
-  fetch("http://localhost:5000/api/job", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      title: title,
-      url: url,
-      content: mainContent,
-    }),
-  })
-    .then((resp) => resp.json())
-    .then((data) => {
-      if (data.status === "success") {
-        alert(
-          `✅ Job sent! Documents created for ${data.company}\nFolder: ${data.folderPath}`,
-        );
-      } else {
-        alert("❌ Error: " + data.message);
-      }
+    // Send to backend
+    fetch("http://127.0.0.1:5000/api/job", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: pageContent,
+        title: pageTitle,
+        url: pageUrl,
+      }),
     })
-    .catch((err) => {
-      alert(
-        "❌ Network error: " +
-          err.message +
-          "\nMake sure Python backend is running!",
-      );
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        // Send result back to popup via background
+        chrome.runtime.sendMessage({
+          action: "JOB_RESULT",
+          data: data,
+        });
+      })
+      .catch((err) => {
+        chrome.runtime.sendMessage({
+          action: "JOB_RESULT",
+          data: {
+            status: "error",
+            message: err.message || "Network error",
+          },
+        });
+      });
+  }
 });

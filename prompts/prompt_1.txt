@@ -1,0 +1,19 @@
+## Instructions 
+
+Je vais te fournir une offre d’emploi. Adapte et réorganise la liste des languages et outils ci-dessous pour correspondre aux priorités de l’employeur. 
+
+## Consignes strictes :
+
+Ne réponds que par la liste reformulée, sans commentaire ni explication.
+Respecte les contraintes suivantes :
+Les lignes « Stack principale » et « Stack secondaire » ne doivent pas dépasser 7 mots-clés au total.
+La ligne “Environnement & Outils” ne doit pas dépasser 9 mots-clés.
+Conserve obligatoirement les mots-clés entourés de «*».
+Tu peux réorganiser et changer de ligne les mots-clés des Stacks, mais pas ceux des Environnement & Outils.
+Supprime les «*» dans ta réponse.
+Mets en avant les technologies explicitement demandées ou suggérées par l’offre.
+
+## Languages et outils
+Stack principale : *Javascript/Typescript* | *React* | *PHP/Symfony* | *C/C++*
+Stack secondaire : Angular | Java | Rust | Python 
+Environnement & Outils : *Docker* | *SQL* | Google Cloud | REST Apis | Jira/Bitbucket | *Git* | *Systèmes Unix* | *Grafana Loki* | MySQL | Doctrine | Metabase

@@ -1,0 +1,102 @@
+
+# Instructions 
+Je vais te fournir une offre d’emploi. Adapte uniquement les passages entre {{}} de la lettre de motivation ci-dessous, en t’inspirant strictement de mes expériences, de ma formation et de l’offre d’emploi. 
+Consignes strictes :
+Ne modifie que les phrases entre {{}} et enlève les {{}} dans ta réponse.
+Respecte le ton, la structure et le style de la lettre modèle.
+Ne réponds que par la lettre de motivation finale, sans commentaire ni explication.
+Mets en avant les compétences et expériences les plus pertinentes par rapport à l’offre d’emploi.
+
+
+# Modèle 
+
+César Fuentes
+41, rue Seguin
+69002 Lyon
+cesar.fuentes@outlook.fr
+0695119454
+{{Entreprise}}
+{{Code Postal, Ville}}
+ 
+ 
+Bonjour,
+ 
+Développeur full-stack et étudiant à l'École 42 Lyon, je vous soumets ma candidature pour {{type de contrat et poste}}, avec disponibilité à partir de janvier 2026. 
+Vous recherchez {{profil recherché, en quelques mots}} : je pense que mon profil sera à sa place au sein de votre équipe.
+
+Avec 3 ans d'expérience en développement, j'ai acquis une solide maîtrise du cycle complet de conception et déploiement d'applications web. Au sein d’Accopilot, {{parler de mes projets et expériences pertinentes, en 4-5 lignes, en lien direct avec l’offre d’emploi. Prioriser mon expérience chez Accopilot et sur les languages indiqués par l’offre d’emploi}}.
+ 
+Par ailleurs, mon parcours atypique constitue un atout pour vous. Ma formation juridique m'a conféré des capacités de rédaction et de synthèse que j'applique tous les jours, et mon engagement associatif m’a conféré de solides compétences en travail d’équipe et en organisation de projets. Je parle couramment anglais et sais travailler efficacement dans un environnement anglophone.
+ 
+Aujourd’hui, je souhaite à la fois approfondir mes compétences en développement full-stack au sein d’une structure encadrante, évoluer dans une équipe bienveillante et passionnée, et développer des projets riches de sens et à valeur sociale positive. Je serais donc ravi de pouvoir échanger avec vous pour discuter de ma candidature.
+ 
+Cordialement, 
+ 
+
+César Fuentes
+
+
+# Expériences et formations
+
+## Projets réalisés
+
+Swift: Développement d’un outil de speech-to-text utilisant le modèle Whisper d’Open AI
+Python: Création de serveurs basés sur le protocole MCP
+C/C++: Implémentation d’un server IRC avec intégration d’un modèle d’IA via l’API de HuggingFace
+Javascript/ThreeJs, Python/Django: Jeu de pong en 3D avec multijoueur via WebSockets, server-side, gestions d’amis, entre autres services
+Rust: Implémentation d’une blockchain simple
+Java/Springboot, Angular: Développement d’une application de comptabilité pour association
+
+
+## Formation
+
+Concepteur développeur de solutions informatiques - Spécialisation Développement web & mobile (niveau RNCP 6), Ecole 42, Lyon, Septembre 2023 - Aujourd’hui
+
+
+Apprentissage de l’ingénierie logicielle avec une pédagogie axée sur le peer-to-
+peer learning et réalisation de multiples projets en C, C++ et Javascript.
+
+
+Classe préparatoire aux concours de journalisme, ESJ Lille, en ligne, Septembre 2022 – Juin 2023
+
+
+Apprentissage du data journalisme et de la data visualization durant une année
+transitoire. Conception d’infographies interactives en JavaScript et D3.js
+
+
+Master 1, Droit International et Droit Européen, Université d’Aix-Marseille, Aix-en-Provence, Septembre 2021 – Juillet 2022
+
+
+Spécialisation en droit international public et droit fiscal international.
+
+
+Licence de droit, Droit Public, Université Paris II Panthéon-Assas, Melun, Septembre 2018 – Juin 2022
+
+
+Acquisition de connaissances juridiques pluridisciplinaires au cours d’une
+licence de droit de trois ans. Spécialisation en droit public en troisième année.
+
+
+
+
+## Expérience Professionnelle 
+
+
+Développeur full-stack, Accopilot, Arnas, Juillet 2025 - Aujourd’hui
+
+
+Développement de fonctionnalités dans un environnement agile, en PHP/Symfony et React. Mise en place d’un outil de centralisation des logs (Grafana Loki). 
+
+
+Secrétaire général et Vice-trésorier, Gâtinais Libre, Montargis, Décembre 2022 – Aujourd’hui
+
+
+Création et organisation d'initiatives culturelles au sein d’une association. Budgétisation (Basicompta, Excel), comptabilité générale, relations avec les pouvoirs publics.
+
+
+Game Master, Les Coqs en Pâte, Paris | Imaginarium, Lyon, Septembre 2022 – Janvier 2024
+
+
+Suivi d’équipes, acting et relation client au sein de 2 escapes games. Amélioration des capacités de résolution de problèmes des équipes
+
+

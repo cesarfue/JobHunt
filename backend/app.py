@@ -3,16 +3,17 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-import openai
 import openpyxl
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Inches, Pt
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from openai import OpenAI
+from openpyxl.styles import Font
 
 app = Flask(__name__)
-# Enable CORS with proper configuration for Chrome extensions
 CORS(
     app,
     resources={
@@ -24,27 +25,25 @@ CORS(
     },
 )
 
-# Configuration
-API_KEY = os.getenv(API_KEY)
-BASE_DIR = Path(__file__).parent
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+BASE_DIR = Path(__file__).parent.parent
 CANDIDATURES_DIR = BASE_DIR / "Candidatures"
 PROMPTS_DIR = BASE_DIR / "prompts"
 EXCEL_FILE = BASE_DIR / "Recherche Janvier 2026.xlsx"
 DEBUG_MODE = False
 
-openai.api_key = API_KEY
+client = OpenAI(api_key=API_KEY)
 
 
 def query_openai(prompt):
-    """Query OpenAI API"""
-    response = openai.ChatCompletion.create(
-        model="gpt-4", messages=[{"role": "user", "content": prompt}]
+    response = client.chat.completions.create(
+        model="gpt-4.1", messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content.strip()
 
 
 def get_prompts():
-    """Load prompts from text files"""
     prompts = {}
     prompt_map = {
         "prompt_1.txt": "HARD_SKILLS",
@@ -62,64 +61,103 @@ def get_prompts():
 
 
 def extract_job_info(content):
-    """Extract job information using OpenAI"""
     prompt = f"""
 À partir du texte de page web ci-dessous, retourne uniquement en JSON, sans aucune autre information:
 {{
   "company": "Nom de la société qui poste l'offre d'emploi",
   "job_title": "Intitulé du poste",
-  "platform": "Plateforme d'offres d'emploi",
-  "job_description": "Contenu de l'offre d'emploi"
+  "platform": "Plateforme d'offres d'emploi, en un mot",
+  "job_description": "Contenu de l'offre d'emploi et du profil recherché"
 }}
 Offre d'emploi:
 {content}
 """
-
     response = query_openai(prompt)
-    return json.loads(response)
+
+    try:
+        return json.loads(response)
+    except json.JSONDecodeError:
+        import re
+
+        match = re.search(r"\{.*\}", response, re.DOTALL)
+        if match:
+            json_str = match.group(0)
+            try:
+                return json.loads(json_str)
+            except Exception as e:
+                print(f"❌ Still not valid JSON: {e}")
+        raise ValueError(f"Invalid JSON returned by model: {response}")
 
 
 def add_to_excel(company, platform, job_title, url, date):
-    """Add entry to Excel tracking sheet"""
-    wb = openpyxl.load_workbook(EXCEL_FILE)
-    ws = wb["suivi"]
+    """Add entry to Excel, format new row, then sort all rows by status (column A)"""
+    try:
+        wb = openpyxl.load_workbook(EXCEL_FILE)
+        ws = wb["suivi"]
 
-    new_row = ["A faire", "CDI", company, platform, job_title, url, date, ""]
-    ws.append(new_row)
+        new_row_data = ["A faire", "CDI", company, platform, job_title, url, date, ""]
+        ws.append(new_row_data)
+        new_row_idx = ws.max_row  # the row we just added
 
-    # Sort by column 1 (Status) ascending, then column 8 (Date) descending
-    # Note: openpyxl doesn't have built-in sort, so we do it manually
-    data = list(ws.iter_rows(min_row=3, values_only=True))
-    data.sort(key=lambda x: (x[0] or "", x[7] or ""), reverse=False)
+        for col in range(1, len(new_row_data) + 1):
+            ws.cell(row=new_row_idx, column=col).font = Font(name="Roboto", size=10)
 
-    # Clear and rewrite data
-    for row_idx, row_data in enumerate(data, start=3):
-        for col_idx, value in enumerate(row_data, start=1):
-            ws.cell(row=row_idx, column=col_idx, value=value)
+        for cell in ws[1]:
+            cell.font = Font(name="Roboto", size=11)
 
-    wb.save(EXCEL_FILE)
+        data = list(ws.iter_rows(min_row=2, values_only=True))
+        data_sorted = sorted(data, key=lambda x: x[0] or "")
+
+        for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+            for cell in row:
+                cell.value = None
+
+        for r_idx, row_data in enumerate(data_sorted, start=2):
+            for c_idx, value in enumerate(row_data, start=1):
+                cell = ws.cell(row=r_idx, column=c_idx, value=value)
+                cell.font = Font(name="Roboto", size=11)
+
+        wb.save(EXCEL_FILE)
+        wb.close()
+
+    except Exception as e:
+        print(f"Error adding to Excel: {e}")
+        raise
 
 
 def create_letter_doc(folder_path, content):
-    """Create formatted cover letter in Word"""
+    from docx import Document
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.shared import Pt
+
     doc = Document()
 
-    # Set default font
     style = doc.styles["Normal"]
     font = style.font
     font.name = "Times New Roman"
     font.size = Pt(11)
+    style.paragraph_format.space_after = Pt(0)
+    style.paragraph_format.space_before = Pt(0)
+    style.paragraph_format.line_spacing = 1.0
 
-    # Add content
-    for paragraph in content.split("\n"):
-        p = doc.add_paragraph(paragraph)
-        p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    lines = [line.rstrip() for line in content.split("\n")]
 
-    doc.save(folder_path / "Lettre de motivation.docx")
+    for i, line in enumerate(lines, start=1):
+        p = doc.add_paragraph(line)
+        p.paragraph_format.space_after = Pt(0)
+        p.paragraph_format.space_before = Pt(0)
+
+        if i in (6, 7):
+            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        else:
+            p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        if i in [5, 7, 9, len(lines) - 2]:
+            doc.add_paragraph("")
+
+    doc.save(folder_path / "Lettre de motivation César Fuentes.docx")
 
 
 def create_skills_doc(folder_path, company, date, results, prompts):
-    """Create skills document in Word"""
     doc = Document()
 
     if DEBUG_MODE:
@@ -131,18 +169,15 @@ def create_skills_doc(folder_path, company, date, results, prompts):
         doc.add_page_break()
         doc.add_heading("📄 GENERATED CONTENT", level=1)
 
-    # Resume section
     doc.add_heading("RESUME", level=2)
     p1 = doc.add_paragraph("Dupliquer le CV Base sur Canva")
     p1.add_run().add_break()
     doc.add_paragraph(f'→ Renommer la copie : "{company} - {date}"')
     doc.add_paragraph()
 
-    # Hard skills
     doc.add_heading("HARD SKILLS", level=2)
     doc.add_paragraph(results["HARD_SKILLS"])
 
-    # Soft skills
     doc.add_heading("SOFT SKILLS", level=2)
     doc.add_paragraph(results["SOFT_SKILLS"])
 
@@ -150,22 +185,18 @@ def create_skills_doc(folder_path, company, date, results, prompts):
 
 
 def generate_job_documents(company, job_title, job_content):
-    """Generate all documents for a job application"""
     prompts = get_prompts()
 
-    # Generate content using OpenAI
     results = {}
     for key, prompt in prompts.items():
         results[key] = query_openai(f"{prompt}\n\n{job_content}")
 
-    # Create folder
     today = datetime.now()
     formatted_date = today.strftime("%Y-%m-%d")
     folder_name = f"{company} - {formatted_date}"
     folder_path = CANDIDATURES_DIR / folder_name
     folder_path.mkdir(parents=True, exist_ok=True)
 
-    # Create documents
     create_letter_doc(folder_path, results["LETTER"])
     create_skills_doc(folder_path, company, formatted_date, results, prompts)
 
@@ -174,26 +205,19 @@ def generate_job_documents(company, job_title, job_content):
 
 @app.route("/api/job", methods=["POST", "OPTIONS"])
 def handle_job():
-    """Handle job posting from Chrome extension"""
     if request.method == "OPTIONS":
         return "", 204
 
     try:
         data = request.json
-
-        # Extract job information
         extracted = extract_job_info(data["content"])
-
-        company = extracted.get("company", "Inconnue")
-        job_title = extracted.get("job_title", data.get("title", "Poste"))
+        company = extracted.get("company", "Inconnue").title()
+        job_title = extracted.get("job_title", data.get("title", "Poste")).title()
         job_content = extracted.get("job_description", data.get("content", ""))
-        platform = extracted.get("platform", "Hors Plateforme")
+        platform = extracted.get("platform", "Hors Plateforme").title()
 
-        # Add to Excel
         today = datetime.now().strftime("%Y-%m-%d")
         add_to_excel(company, platform, job_title, data["url"], today)
-
-        # Generate documents
         folder_path = generate_job_documents(company, job_title, job_content)
 
         return jsonify(
@@ -204,13 +228,11 @@ def handle_job():
                 "jobTitle": job_title,
             }
         )
-
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
 if __name__ == "__main__":
-    # Ensure directories exist
     CANDIDATURES_DIR.mkdir(exist_ok=True)
     PROMPTS_DIR.mkdir(exist_ok=True)
 
