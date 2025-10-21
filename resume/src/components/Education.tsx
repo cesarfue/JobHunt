@@ -10,10 +10,10 @@ export const Education = ({
     <div>
       {education.map((edu, i) => (
         <div key={i}>
-          <h3>{edu.title}</h3>
-          <div>
-            <span>{edu.location}</span> • {edu.time_period}
-          </div>
+          <p>{edu.title}</p>
+          <p>
+            {edu.location} • {edu.time_period}
+          </p>
           <p>{edu.description}</p>
         </div>
       ))}

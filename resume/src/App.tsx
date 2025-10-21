@@ -6,6 +6,7 @@ import { Experience } from "./components/Experience";
 import { Education } from "./components/Education";
 import { Projects } from "./components/Projects";
 import { LanguagesAndInterests } from "./components/LanguagesAndInterests";
+import Pic from "./assets/photo.jpeg";
 
 export default function App() {
   const { resumeData, error } = useResumeData();
@@ -21,20 +22,30 @@ export default function App() {
   }
 
   return (
-    <div className="a4-page">
-      <Header basics={resumeData.basics} />
-      <Summary summary={resumeData.summary} />
-      <Skills
-        hard_skills={resumeData.hard_skills}
-        soft_skills={resumeData.soft_skills}
-      />
-      <Experience work_experience={resumeData.work_experience} />
-      <Education education={resumeData.education} />
-      <Projects projects={resumeData.projects} />
-      <LanguagesAndInterests
-        languages={resumeData.languages}
-        interests={resumeData.interests}
-      />
+    <div className="a4-page grid grid-cols-[35%_65%] gap-4">
+      <div className="space-y-4">
+        <img
+          src={Pic}
+          alt="César Fuentes"
+          className="w-50 h-50 rounded-full object-cover mb-4"
+        />
+        <Summary summary={resumeData.summary} />
+        <Skills
+          hard_skills={resumeData.hard_skills}
+          soft_skills={resumeData.soft_skills}
+        />
+        <LanguagesAndInterests
+          languages={resumeData.languages}
+          interests={resumeData.interests}
+        />
+      </div>
+
+      <div className="space-y-4">
+        <Header basics={resumeData.basics} />
+        <Projects projects={resumeData.projects} />
+        <Experience work_experience={resumeData.work_experience} />
+        <Education education={resumeData.education} />
+      </div>
     </div>
   );
 }

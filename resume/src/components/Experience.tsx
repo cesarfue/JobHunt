@@ -10,10 +10,10 @@ export const Experience = ({
     <div>
       {work_experience.map((exp, i) => (
         <div key={i}>
-          <h3>{exp.title}</h3>
-          <div>
-            <span>{exp.location}</span> • {exp.time_period}
-          </div>
+          <p>{exp.title}</p>
+          <p>
+            {exp.location} • {exp.time_period}
+          </p>
           <p>{exp.description}</p>
         </div>
       ))}
