@@ -1,0 +1,102 @@
+{
+  "basics": {
+    "name": "César",
+    "image": "",
+    "contact": {
+      "phone": "06 95 11 94 54",
+      "email": "cesar.fuentes@outlook.fr",
+      "github": "https://github.com/cesarfue"
+    }
+  },
+  "summary": "Développeur full-stack, je suis passionné par le développement d'applications à impact positif, les pratiques DevOps et IaC. Fort de trois ans d'expérience en programmation, principalement en Javascript/Typescript et PHP/Symfony, je suis à la recherche d’une équipe où mettre à profit mes compétences.",
+  "hard_skills": {
+    "main": ["PHP/Symfony | Javascript/Typescript | React"],
+    "secondary": ["Python | Java | Angular | C/C++"],
+    "environmnent_and_tools": [
+      "Docker | SQL | Git | Systèmes Unix | Grafana Loki | Jira/Bitbucket | REST Apis | Metabase"
+    ]
+  },
+  "soft_skills": [
+    "Esprit d’analyse et de synthèse",
+    "Initiative et proactivité",
+    "Curiosité et veille technologique",
+    "Adaptabilité et apprentissage rapide"
+  ],
+
+  "languages": [
+    {
+      "language": "Français",
+      "fluency": "Natif"
+    },
+    {
+      "language": "Anglais",
+      "fluency": "Courant (TOEIC 980/990)"
+    }
+  ],
+  "interests": ["Pratique régulière du trail"],
+  "projects": [
+    {
+      "language": "Swift",
+      "description": "Développement d’un outil de speech-to-text utilisant le modèle Whisper d’Open AI"
+    },
+    {
+      "language": "Javascript/ThreeJs, Python/Django",
+      "description": "Jeu de pong en 3D avec multijoueur via WebSockets, server-side, gestions d’amis, entre autres services"
+    },
+    {
+      "language": "Python",
+      "description": "Création de serveurs basés sur le protocole MCP"
+    },
+    {
+      "language": "Java/Springboot, Angular",
+      "description": "Développement d’une application de comptabilité pour association"
+    }
+  ],
+  "education": [
+    {
+      "title": "Concepteur développeur de solutions informatiques - Spécialisation Développement web & mobile (niveau RNCP 6)",
+      "location": "Ecole 42, Lyon",
+      "time_period": "Septembre 2023 - Aujourd’hui",
+      "description": "Apprentissage de l’ingénierie logicielle avec une pédagogie axée sur le peer-to-peer learning et réalisation de multiples projets en C, C++ et Javascript."
+    },
+    {
+      "title": "Classe préparatoire aux concours de journalisme",
+      "location": "ESJ Lille, en ligne",
+      "time_period": "Septembre 2022 – Juin 2023",
+      "description": "Apprentissage du data journalisme et de la data visualization durant une année transitoire. Conception d’infographies interactives en JavaScript et D3.js."
+    },
+    {
+      "title": "Master 1, Droit International et Droit Européen",
+      "location": "Université d’Aix-Marseille, Aix-en-Provence",
+      "time_period": "Septembre 2021 – Juillet 2022",
+      "description": "Spécialisation en droit international public et droit fiscal international."
+    },
+    {
+      "title": "Licence de droit, Droit Public",
+      "location": "Université Paris II Panthéon-Assas, Melun",
+      "time_period": "Septembre 2018 – Juin 2022",
+      "description": "Acquisition de connaissances juridiques pluridisciplinaires au cours d’une licence de droit de trois ans. Spécialisation en droit public en troisième année."
+    }
+  ],
+  "work_experience": [
+    {
+      "title": "Développeur Full-Stack",
+      "location": "Accopilot, Arnas",
+      "time_period": "Juillet 2025 - Aujourd’hui",
+      "description": "Développement full-stack en PHP/Symfony, refonte de la gestion des logs dans un environnement agile."
+    },
+    {
+      "title": "Secrétaire général, Vice-trésorier",
+      "location": "Gâtinais Libre, Montargis",
+      "time_period": "Décembre 2022 – Aujourd’hui",
+      "description": "Création et organisation d'initiatives culturelles au sein d’une association. Budgétisation, comptabilité générale, relations avec les pouvoirs publics."
+    },
+    {
+      "title": "Game Master",
+      "location": "Les Coqs en Pâte, Paris | Imaginarium, Lyon",
+      "time_period": "Septembre 2022 – Janvier 2024",
+      "description": "Suivi d’équipes, acting et relation client au sein de 2 escapes games. Amélioration des capacités de résolution de problèmes des équipes"
+    }
+  ]
+}
+

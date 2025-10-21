@@ -28,7 +28,7 @@ CORS(
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 BASE_DIR = Path(__file__).parent.parent
-CANDIDATURES_DIR = BASE_DIR / "Candidatures"
+CANDIDATURES_DIR = BASE_DIR / "Applications"
 PROMPTS_DIR = BASE_DIR / "prompts"
 EXCEL_FILE = BASE_DIR / "Recherche Janvier 2026.xlsx"
 DEBUG_MODE = False
@@ -240,7 +240,7 @@ if __name__ == "__main__":
     PROMPTS_DIR.mkdir(exist_ok=True)
 
     print(f"Server starting...")
-    print(f"Candidatures folder: {CANDIDATURES_DIR}")
+    print(f"Applications folder: {CANDIDATURES_DIR}")
     print(f"Prompts folder: {PROMPTS_DIR}")
     print(f"Excel file: {EXCEL_FILE}")
 
