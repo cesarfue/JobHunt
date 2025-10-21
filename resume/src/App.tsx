@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useResumeData } from "./hooks/useResumeData";
+import { Header } from "./components/Header";
+import { Summary } from "./components/Summary";
+import { Skills } from "./components/Skills";
+import { Experience } from "./components/Experience";
+import { Education } from "./components/Education";
+import { Projects } from "./components/Projects";
+import { LanguagesAndInterests } from "./components/LanguagesAndInterests";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const { resumeData, error } = useResumeData();
+
+  if (error || !resumeData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl text-red-600">
+          Erreur: {error || "Données non disponibles"}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="a4-page">
+      <Header basics={resumeData.basics} />
+      <Summary summary={resumeData.summary} />
+      <Skills
+        hard_skills={resumeData.hard_skills}
+        soft_skills={resumeData.soft_skills}
+      />
+      <Experience work_experience={resumeData.work_experience} />
+      <Education education={resumeData.education} />
+      <Projects projects={resumeData.projects} />
+      <LanguagesAndInterests
+        languages={resumeData.languages}
+        interests={resumeData.interests}
+      />
+    </div>
+  );
 }
-
-export default App
