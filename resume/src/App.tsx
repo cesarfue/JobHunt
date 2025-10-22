@@ -22,7 +22,7 @@ export default function App() {
   }
 
   return (
-    <div className="a4-page grid grid-cols-[35%_65%]">
+    <div className="grid grid-cols-[35%_65%]">
       <div className="left-column space-y-4">
         <img src={Pic} alt="César Fuentes" className="photo" />
         <div className="colored-bar">

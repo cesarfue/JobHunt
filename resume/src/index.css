@@ -10,16 +10,15 @@
   }
 
   body {
-    background-color: #e5e5e5;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 20px;
+    padding: 40px;
     text-align: justify;
   }
 
   h1 {
-    margin-top: 30px;
+    margin-top: 60px;
     font-size: 28pt;
     font-weight: 400;
   }
@@ -118,6 +117,7 @@ img.photo {
   margin: 0 auto 10px;
   display: block;
   border: 1px solid #333;
+  margin-top: 40px;
 }
 
 .list-name {
