@@ -4,15 +4,16 @@
     "contact": {
       "phone": "06 95 11 94 54",
       "email": "cesar.fuentes@outlook.fr",
-      "github": "https://github.com/cesarfue"
+      "github": "https://github.com/cesarfue",
+      "city": "Lyon"
     }
   },
   "summary": "Développeur full-stack, je suis passionné par le développement d'applications à impact positif, les pratiques DevOps et IaC. Fort de trois ans d'expérience en programmation, principalement en Javascript/Typescript et PHP/Symfony, je suis à la recherche d’une équipe où mettre à profit mes compétences.",
   "hard_skills": {
-    "main": ["PHP/Symfony | Javascript/Typescript | React"],
-    "secondary": ["Python | Java | Angular | C/C++"],
+    "main": ["PHP/Symfony, Javascript/Typescript, React"],
+    "secondary": ["Python, Java, Angular, C/C++"],
     "environmnent_and_tools": [
-      "Docker | SQL | Git | Systèmes Unix | Grafana Loki | Jira/Bitbucket | REST Apis | Metabase"
+      "Docker, SQL, Git, Systèmes Unix, Grafana Loki, Jira/Bitbucket, REST Apis, Metabase"
     ]
   },
   "soft_skills": [
@@ -36,19 +37,19 @@
   "projects": [
     {
       "language": "Swift",
-      "description": "Développement d’un outil de speech-to-text utilisant le modèle Whisper d’Open AI"
+      "description": "Développement d’un outil de speech-to-text utilisant le modèle Whisper d’Open AI."
     },
     {
       "language": "Javascript/ThreeJs, Python/Django",
-      "description": "Jeu de pong en 3D avec multijoueur via WebSockets, server-side, gestions d’amis, entre autres services"
+      "description": "Jeu de pong en 3D avec multijoueur via WebSockets, server-side, gestions d’amis, entre autres services."
     },
     {
       "language": "Python",
-      "description": "Création de serveurs basés sur le protocole MCP"
+      "description": "Création de serveurs basés sur le protocole MCP."
     },
     {
       "language": "Java/Springboot, Angular",
-      "description": "Développement d’une application de comptabilité pour association"
+      "description": "Développement d’une application de comptabilité pour association."
     }
   ],
   "education": [
@@ -62,7 +63,7 @@
       "title": "Classe préparatoire aux concours de journalisme",
       "location": "ESJ Lille, en ligne",
       "time_period": "Septembre 2022 – Juin 2023",
-      "description": "Apprentissage du data journalisme et de la data visualization durant une année transitoire. Conception d’infographies interactives en JavaScript et D3.js."
+      "description": "Apprentissage de la data visualization durant une année transitoire. Conception d’infographies interactives en Javascript et D3.js."
     },
     {
       "title": "Master 1, Droit International et Droit Européen",
@@ -73,8 +74,8 @@
     {
       "title": "Licence de droit, Droit Public",
       "location": "Université Paris II Panthéon-Assas, Melun",
-      "time_period": "Septembre 2018 – Juin 2022",
-      "description": "Acquisition de connaissances juridiques pluridisciplinaires au cours d’une licence de droit de trois ans. Spécialisation en droit public en troisième année."
+      "time_period": "Septembre 2018 – Juin 2021",
+      "description": "Acquisition de connaissances juridiques pluridisciplinaires au cours d’une licence de droit de trois ans. Spécialisation en droit public."
     }
   ],
   "work_experience": [
@@ -82,7 +83,7 @@
       "title": "Développeur Full-Stack",
       "location": "Accopilot, Arnas",
       "time_period": "Juillet 2025 - Aujourd’hui",
-      "description": "Développement full-stack en PHP/Symfony, refonte de la gestion des logs dans un environnement agile."
+      "description": "Développement full-stack en PHP/Symfony et React, refonte de la gestion des logs dans un environnement agile."
     },
     {
       "title": "Secrétaire général, Vice-trésorier",
@@ -94,7 +95,7 @@
       "title": "Game Master",
       "location": "Les Coqs en Pâte, Paris | Imaginarium, Lyon",
       "time_period": "Septembre 2022 – Janvier 2024",
-      "description": "Suivi d’équipes, acting et relation client au sein de 2 escapes games. Amélioration des capacités de résolution de problèmes des équipes"
+      "description": "Suivi d’équipes, acting et relation client au sein de 2 escapes games. Amélioration des capacités de résolution de problèmes des équipes."
     }
   ]
 }

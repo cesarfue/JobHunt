@@ -2,6 +2,7 @@ export interface Contact {
   phone: string;
   email: string;
   github: string;
+  city: string;
 }
 
 export interface Basics {
