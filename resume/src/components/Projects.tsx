@@ -3,13 +3,13 @@ import type { Project } from "../types/ResumeTypes";
 export const Projects = ({ projects }: { projects: Project[] }) => (
   <section>
     <h2>Projets personnels</h2>
-    <div>
+    <ul>
       {projects.map((project, i) => (
-        <div key={i} className="project-entry">
-          <p className="project-language">{project.language}</p>
-          <p className="project-description">{project.description}</p>
-        </div>
+        <li key={i} className="project-entry">
+          <span className="list-name">{project.language}</span> :{" "}
+          {project.description}
+        </li>
       ))}
-    </div>
+    </ul>
   </section>
 );

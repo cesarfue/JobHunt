@@ -25,15 +25,17 @@ export default function App() {
     <div className="a4-page grid grid-cols-[35%_65%]">
       <div className="left-column space-y-4">
         <img src={Pic} alt="César Fuentes" className="photo" />
-        <Summary summary={resumeData.summary} />
-        <Skills
-          hard_skills={resumeData.hard_skills}
-          soft_skills={resumeData.soft_skills}
-        />
-        <LanguagesAndInterests
-          languages={resumeData.languages}
-          interests={resumeData.interests}
-        />
+        <div className="colored-bar">
+          <Summary summary={resumeData.summary} />
+          <Skills
+            hard_skills={resumeData.hard_skills}
+            soft_skills={resumeData.soft_skills}
+          />
+          <LanguagesAndInterests
+            languages={resumeData.languages}
+            interests={resumeData.interests}
+          />
+        </div>
       </div>
 
       <div className="right-column space-y-4">

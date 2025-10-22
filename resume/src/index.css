@@ -15,23 +15,20 @@
     justify-content: center;
     align-items: flex-start;
     padding: 20px;
-    margin: 0;
+    text-align: justify;
   }
 
   h1 {
     font-size: 28pt;
     font-weight: 400;
-    margin: 0 0 8px 0;
-    color: #1a1a1a;
   }
 
   h2 {
-    font-size: 13pt;
+    font-size: 11pt;
     font-weight: 600;
-    margin: 0 0 8px 0;
+    margin: 14px 0;
     padding-bottom: 4px;
     border-bottom: 1px solid #333;
-    color: #1a1a1a;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -44,20 +41,9 @@
   }
 
   p {
-    margin: 0 0 6px 0;
     line-height: 1.4;
     color: #1a1a1a;
-  }
-
-  ul {
-    margin: 4px 0 8px 0;
-    padding-left: 16px;
-    list-style-type: disc;
-  }
-
-  li {
-    margin: 2px 0;
-    line-height: 1.4;
+    margin: 4px 0;
   }
 
   a {
@@ -67,6 +53,16 @@
 
   a:hover {
     text-decoration: underline;
+  }
+
+  ul {
+    padding-left: 16px;
+    list-style-type: disc;
+  }
+
+  li {
+    margin: 12px 0;
+    line-height: 1.4;
   }
 
   section {
@@ -79,65 +75,43 @@
   min-height: 297mm;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 15mm;
+  padding: 12mm;
   overflow: visible;
 }
 
-/* Header styles */
+.left-column {
+  padding-right: 12px;
+}
+
+.right-column {
+  padding-left: 12px;
+}
+
 header {
-  margin-bottom: 16px;
+  margin-bottom: 35px;
 }
 
 header div {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  font-size: 9pt;
   margin-top: 6px;
 }
 
-header a {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* Photo styles */
 img.photo {
   width: 200px;
   height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 0 auto 16px;
+  margin: 0 auto 35px;
   display: block;
   border: 1px solid #333;
 }
 
-/* Summary styles */
-.summary-text {
-  text-align: justify;
-  line-height: 1.5;
-  margin-bottom: 12px;
-  font-size: 9pt;
+.list-name {
+  font-style: italic;
 }
 
-/* Skills styles */
-.skill-badge {
-  display: inline-block;
-  background-color: #f0f0f0;
-  padding: 4px 10px;
-  margin: 2px 4px 2px 0;
-  border-radius: 4px;
-  font-size: 8.5pt;
-  font-weight: 500;
-  color: #333;
-}
-
-.skill-list {
-  margin-bottom: 12px;
-}
-
-/* Experience and Education entries */
 .entry {
   margin-bottom: 12px;
   page-break-inside: avoid;
@@ -145,7 +119,6 @@ img.photo {
 
 .entry-title {
   font-weight: 700;
-  font-size: 9pt;
   margin-bottom: 2px;
   color: #1a1a1a;
 }
@@ -157,70 +130,7 @@ img.photo {
   font-style: italic;
 }
 
-.entry-description {
-  font-size: 9pt;
-  line-height: 1.4;
-  text-align: justify;
-}
-
-/* Projects styles */
 .project-entry {
-  margin-bottom: 10px;
-}
-
-.project-language {
-  font-weight: 600;
-  font-size: 9pt;
-  color: #333;
-  margin-bottom: 2px;
-}
-
-.project-description {
-  font-size: 9pt;
-  line-height: 1.4;
+  margin: 2px 0;
   text-align: justify;
-}
-
-/* Languages and interests */
-.language-item {
-  margin-bottom: 4px;
-}
-
-.language-name {
-  font-weight: 600;
-}
-
-/* Left column (sidebar) styling */
-.left-column {
-  padding-right: 12px;
-}
-
-/* Right column (main content) styling */
-.right-column {
-  padding-left: 12px;
-}
-
-/* Print styles */
-@media print {
-  body {
-    background: white;
-    padding: 0;
-  }
-
-  .a4-page {
-    box-shadow: none;
-    margin: 0;
-    padding: 15mm;
-    width: 210mm;
-    min-height: 297mm;
-  }
-}
-
-/* Spacing utilities */
-.section-spacing {
-  margin-bottom: 16px;
-}
-
-.compact-spacing {
-  margin-bottom: 8px;
 }

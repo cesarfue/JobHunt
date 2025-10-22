@@ -8,27 +8,21 @@ export const LanguagesAndInterests = ({
   interests: string[];
 }) => (
   <section>
-    <h2>Langues & Intérêts</h2>
+    <h2>Langues</h2>
     <div>
-      <div>
-        <h3>Langues</h3>
-        <ul>
-          {languages.map((lang, i) => (
-            <li key={i} className="language-item">
-              <span className="language-name">{lang.language}</span>:{" "}
-              {lang.fluency}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h3>Centres d'intérêt</h3>
-        <ul>
-          {interests.map((interest, i) => (
-            <li key={i}>{interest}</li>
-          ))}
-        </ul>
-      </div>
+      {languages.map((lang, i) => (
+        <p key={i}>
+          <span className="list-name">{lang.language}</span> : {lang.fluency}
+        </p>
+      ))}
+    </div>
+    <div>
+      <h2>Intérêts</h2>
+      <ul>
+        {interests.map((interest, i) => (
+          <li key={i}>{interest}</li>
+        ))}
+      </ul>
     </div>
   </section>
 );
