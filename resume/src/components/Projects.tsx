@@ -5,9 +5,9 @@ export const Projects = ({ projects }: { projects: Project[] }) => (
     <h2>Projets personnels</h2>
     <div>
       {projects.map((project, i) => (
-        <div key={i}>
-          <p>{project.language}</p>
-          <p>{project.description}</p>
+        <div key={i} className="project-entry">
+          <p className="project-language">{project.language}</p>
+          <p className="project-description">{project.description}</p>
         </div>
       ))}
     </div>

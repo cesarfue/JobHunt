@@ -8,14 +8,15 @@ export const LanguagesAndInterests = ({
   interests: string[];
 }) => (
   <section>
-    <h2>Langues et centres d'intérêt</h2>
+    <h2>Langues & Intérêts</h2>
     <div>
       <div>
         <h3>Langues</h3>
         <ul>
           {languages.map((lang, i) => (
-            <li key={i}>
-              <span>{lang.language}</span>: {lang.fluency}
+            <li key={i} className="language-item">
+              <span className="language-name">{lang.language}</span>:{" "}
+              {lang.fluency}
             </li>
           ))}
         </ul>

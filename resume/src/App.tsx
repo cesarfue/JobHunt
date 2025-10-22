@@ -22,13 +22,9 @@ export default function App() {
   }
 
   return (
-    <div className="a4-page grid grid-cols-[35%_65%] gap-4">
-      <div className="space-y-4">
-        <img
-          src={Pic}
-          alt="César Fuentes"
-          className="w-50 h-50 rounded-full object-cover mb-4"
-        />
+    <div className="a4-page grid grid-cols-[35%_65%]">
+      <div className="left-column space-y-4">
+        <img src={Pic} alt="César Fuentes" className="photo" />
         <Summary summary={resumeData.summary} />
         <Skills
           hard_skills={resumeData.hard_skills}
@@ -40,7 +36,7 @@ export default function App() {
         />
       </div>
 
-      <div className="space-y-4">
+      <div className="right-column space-y-4">
         <Header basics={resumeData.basics} />
         <Projects projects={resumeData.projects} />
         <Experience work_experience={resumeData.work_experience} />

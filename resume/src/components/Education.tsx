@@ -9,12 +9,12 @@ export const Education = ({
     <h2>Formation</h2>
     <div>
       {education.map((edu, i) => (
-        <div key={i}>
-          <p>{edu.title}</p>
-          <p>
+        <div key={i} className="entry">
+          <p className="entry-title">{edu.title}</p>
+          <p className="entry-meta">
             {edu.location} • {edu.time_period}
           </p>
-          <p>{edu.description}</p>
+          <p className="entry-description">{edu.description}</p>
         </div>
       ))}
     </div>

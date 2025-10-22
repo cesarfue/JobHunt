@@ -2,23 +2,225 @@
 
 @layer base {
   html {
+    font-size: 9pt;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  body {
+    background-color: #e5e5e5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 28pt;
+    font-weight: 400;
+    margin: 0 0 8px 0;
+    color: #1a1a1a;
+  }
+
+  h2 {
+    font-size: 13pt;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #333;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  h3 {
     font-size: 10pt;
+    font-weight: 400;
+    margin: 8px 0 4px 0;
+    color: #333;
+  }
+
+  p {
+    margin: 0 0 6px 0;
+    line-height: 1.4;
+    color: #1a1a1a;
+  }
+
+  ul {
+    margin: 4px 0 8px 0;
+    padding-left: 16px;
+    list-style-type: disc;
+  }
+
+  li {
+    margin: 2px 0;
+    line-height: 1.4;
+  }
+
+  a {
+    color: #1a1a1a;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  section {
+    margin-bottom: 16px;
   }
 }
 
 .a4-page {
   width: 210mm;
-  height: 297mm;
+  min-height: 297mm;
   background: white;
-  box-shadow: 0 0 5mm rgba(0, 0, 0, 0.1);
-  padding: 10mm;
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 15mm;
+  overflow: visible;
 }
 
-body {
-  background-color: #f0f0f0;
+/* Header styles */
+header {
+  margin-bottom: 16px;
+}
+
+header div {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 9pt;
+  margin-top: 6px;
+}
+
+header a {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Photo styles */
+img.photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  display: block;
+  border: 1px solid #333;
+}
+
+/* Summary styles */
+.summary-text {
+  text-align: justify;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  font-size: 9pt;
+}
+
+/* Skills styles */
+.skill-badge {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 4px 10px;
+  margin: 2px 4px 2px 0;
+  border-radius: 4px;
+  font-size: 8.5pt;
+  font-weight: 500;
+  color: #333;
+}
+
+.skill-list {
+  margin-bottom: 12px;
+}
+
+/* Experience and Education entries */
+.entry {
+  margin-bottom: 12px;
+  page-break-inside: avoid;
+}
+
+.entry-title {
+  font-weight: 700;
+  font-size: 9pt;
+  margin-bottom: 2px;
+  color: #1a1a1a;
+}
+
+.entry-meta {
+  font-size: 8.5pt;
+  color: #555;
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+.entry-description {
+  font-size: 9pt;
+  line-height: 1.4;
+  text-align: justify;
+}
+
+/* Projects styles */
+.project-entry {
+  margin-bottom: 10px;
+}
+
+.project-language {
+  font-weight: 600;
+  font-size: 9pt;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.project-description {
+  font-size: 9pt;
+  line-height: 1.4;
+  text-align: justify;
+}
+
+/* Languages and interests */
+.language-item {
+  margin-bottom: 4px;
+}
+
+.language-name {
+  font-weight: 600;
+}
+
+/* Left column (sidebar) styling */
+.left-column {
+  padding-right: 12px;
+}
+
+/* Right column (main content) styling */
+.right-column {
+  padding-left: 12px;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .a4-page {
+    box-shadow: none;
+    margin: 0;
+    padding: 15mm;
+    width: 210mm;
+    min-height: 297mm;
+  }
+}
+
+/* Spacing utilities */
+.section-spacing {
+  margin-bottom: 16px;
+}
+
+.compact-spacing {
+  margin-bottom: 8px;
 }

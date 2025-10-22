@@ -1,5 +1,6 @@
 export const Summary = ({ summary }: { summary: string }) => (
   <section>
-    <p>{summary}</p>
+    <h2>À propos</h2>
+    <p className="summary-text">{summary}</p>
   </section>
 );

@@ -10,35 +10,41 @@ export const Skills = ({
   <section>
     <h2>Compétences</h2>
 
-    <div>
-      <h3>Compétences techniques principales</h3>
+    <div className="skill-list">
+      <h3>Principales</h3>
       <div>
         {hard_skills.main.map((skill, i) => (
-          <span key={i}>{skill}</span>
+          <span key={i} className="skill-badge">
+            {skill}
+          </span>
         ))}
       </div>
     </div>
 
-    <div>
-      <h3>Compétences secondaires</h3>
+    <div className="skill-list">
+      <h3>Secondaires</h3>
       <div>
         {hard_skills.secondary.map((skill, i) => (
-          <span key={i}>{skill}</span>
+          <span key={i} className="skill-badge">
+            {skill}
+          </span>
         ))}
       </div>
     </div>
 
-    <div>
-      <h3>Environnement et outils</h3>
+    <div className="skill-list">
+      <h3>Outils</h3>
       <div>
         {hard_skills.environmnent_and_tools.map((skill, i) => (
-          <span key={i}>{skill}</span>
+          <span key={i} className="skill-badge">
+            {skill}
+          </span>
         ))}
       </div>
     </div>
 
     <div>
-      <h3>Compétences transversales</h3>
+      <h3>Soft Skills</h3>
       <ul>
         {soft_skills.map((skill, i) => (
           <li key={i}>{skill}</li>
