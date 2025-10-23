@@ -1,23 +1,30 @@
 ## Instructions 
+Je vais te fournir une offre d'emploi. Adapte la liste des compétences ci-dessous pour correspondre aux priorités de l'employeur.
 
-Je vais te fournir une offre d’emploi. Adapte la liste des skills ci-dessous pour correspondre aux priorités de l’employeur. 
-Réponds sans commentaire ni explication, sous forme de JSON valide
-Les lignes « main » et « secondary » ne doivent pas dépasser 7 skills au total.
-La ligne “environment_and_tools” ne doit pas dépasser 9 skills.
-Conserve obligatoirement les skills entourés de «*».
-Garde les skills sur leur lignes.
-Supprime les «*» dans ta réponse.
-Mets en avant les skills explicitement demandées ou suggérées par l’offre
-N'invente pas de skill qui ne soit pas dans le JSON ci-dessous
+**Règles importantes :**
+- Les compétences entourées de {} sont OBLIGATOIRES et doivent rester dans leur catégorie d'origine
+- Les langages/frameworks vont dans "main" ou "secondary" uniquement
+- Les environnements et outils vont dans "environment_and_tools" uniquement
+- Mets en avant les compétences explicitement demandées ou suggérées par l'offre
+- N'invente aucune compétence qui ne figure pas dans la liste ci-dessous
+- Maximum 9 compétences dans "environment_and_tools"
+- Supprime les {} dans ta réponse finale
 
-## JSON
+## Liste des compétences disponibles
+
+- Compétences principales (langages/frameworks maîtrisés) : {PHP/Symfony}, {Javascript/Typescript}, {React}
+
+- Compétences secondaires (langages/frameworks) : {Python}, {Java/Springboot}, Angular, {C/C++}, Rust
+
+- Environnements et outils : {Docker}, {SQL}, {Git}, Google Cloud, {Systèmes Unix}, {Grafana Loki}, Jira/Bitbucket, REST Apis, Metabase, MySQL, Doctrine, OVH Cloud, Kubernetes
+
+## Format de réponse attendu
+Réponds UNIQUEMENT avec un JSON valide suivant cette structure exacte, sans texte avant ou après :
 
 {
   "hard_skills": {
-    "main": ["*PHP/Symfony*", "*Javascript/Typescript*", "*React*"],
-    "secondary": ["*Python*", "Java/Springboot", "Angular", "*C/C++*", "Rust"],
-    "environment_and_tools": [
-      "*Docker*", "*SQL*", "*Git*", "Google Cloud", "*Systèmes Unix*", "*Grafana Loki*", "Jira/Bitbucket", "REST Apis", "Metabase", "MySQL", "Doctrine", "OVH Cloud", "Kubernetes"
-    ]
+    "main": ["skill1", "skill2", ...],
+    "secondary": ["skill1", "skill2", ...],
+    "environment_and_tools": ["tool1", "tool2", ...]
   }
 }

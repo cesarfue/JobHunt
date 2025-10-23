@@ -2,10 +2,9 @@ import json
 import os
 import re
 
+from config import Config
 from dotenv import load_dotenv
 from openai import OpenAI
-
-from config import Config
 
 load_dotenv()
 
@@ -15,7 +14,7 @@ client = OpenAI(api_key=API_KEY)
 
 def query_openai(prompt):
     response = client.chat.completions.create(
-        model="gpt-4.1", messages=[{"role": "user", "content": prompt}]
+        model="gpt-5", messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content.strip()
 

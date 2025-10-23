@@ -30,7 +30,7 @@ def create_letter_doc(folder_path, content):
             p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
         else:
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        if i in [5, 7, 9, len(lines) - 2]:
+        if i in [5, 7, 10, len(lines) - 2]:
             doc.add_paragraph("")
 
     doc.save(folder_path / "Lettre de motivation César Fuentes.docx")
