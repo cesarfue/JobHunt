@@ -13,8 +13,22 @@ def generate_job_documents(company, job_title, job_content):
     prompts = get_prompts()
 
     results = {}
+    debug_log = []
+
     for key, prompt in prompts.items():
-        results[key] = query_openai(f"{prompt}\n\n## Job content\n{job_content}")
+        full_prompt = f"{prompt}\n\n## Job content\n{job_content}"
+        answer = query_openai(full_prompt)
+        results[key] = answer
+
+        if Config.DEBUG_MODE:
+            debug_log.append(
+                {
+                    "key": key,
+                    "prompt": full_prompt,
+                    "answer": answer,
+                    "timestamp": datetime.now().isoformat(),
+                }
+            )
 
     today = datetime.now()
     formatted_date = today.strftime("%Y-%m-%d")
@@ -35,5 +49,13 @@ def generate_job_documents(company, job_title, job_content):
 
     create_overrides_json(folder_path, results)
     generate_resume_pdf(folder_path, company, formatted_date)
+
+    if Config.DEBUG_MODE and debug_log:
+        import json
+
+        debug_file = folder_path / "debug_log.json"
+        with open(debug_file, "w", encoding="utf-8") as f:
+            json.dump(debug_log, f, ensure_ascii=False, indent=2)
+        print(f"Debug log created: {debug_file}")
 
     return str(folder_path.absolute())

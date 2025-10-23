@@ -12,4 +12,4 @@ class Config:
     RESUME_SCRIPT = RESUME_DIR / "exportToPDF.js"
     PHOTO_PATH = RESUME_DIR / "src" / "assets" / "photo.jpeg"
     RESUME_OVERRIDES_DIR = RESUME_DIR / "public" / "resume_overrides"
-    DEBUG_MODE = False
+    DEBUG_MODE = True
