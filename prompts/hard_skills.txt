@@ -1,26 +1,23 @@
 ## Instructions 
 
-Je vais te fournir une offre d’emploi. Adapte et réorganise la liste des languages et outils ci-dessous, en format JSON, pour correspondre aux priorités de l’employeur. 
-
-## Consignes strictes :
-
-Ne réponds que par le JSON reformulé, sans commentaire ni explication, sous forme de JSON valide
-Respecte les contraintes suivantes :
-Les lignes « main » et « secondary » ne doivent pas dépasser 7 mots-clés au total.
-La ligne “environment_and_tools” ne doit pas dépasser 9 mots-clés.
-Conserve obligatoirement les mots-clés entourés de «*».
-Tu peux réorganiser et changer de ligne les mots-clés des main et secondary, mais pas ceux des environment_and_tools.
+Je vais te fournir une offre d’emploi. Adapte la liste des skills ci-dessous pour correspondre aux priorités de l’employeur. 
+Réponds sans commentaire ni explication, sous forme de JSON valide
+Les lignes « main » et « secondary » ne doivent pas dépasser 7 skills au total.
+La ligne “environment_and_tools” ne doit pas dépasser 9 skills.
+Conserve obligatoirement les skills entourés de «*».
+Garde les skills sur leur lignes.
 Supprime les «*» dans ta réponse.
-Mets en avant les technologies explicitement demandées ou suggérées par l’offre, sans en inventer.
+Mets en avant les skills explicitement demandées ou suggérées par l’offre
+N'invente pas de skill qui ne soit pas dans le JSON ci-dessous
 
 ## JSON
 
 {
   "hard_skills": {
     "main": ["*PHP/Symfony*", "*Javascript/Typescript*", "*React*"],
-    "secondary": ["*Python*", "Java", "Angular", "*C/C++*", "Rust"],
+    "secondary": ["*Python*", "Java/Springboot", "Angular", "*C/C++*", "Rust"],
     "environment_and_tools": [
-      "*Docker*", "*SQL*", "*Git*", "Google Cloud", "*Systèmes Unix*", "*Grafana Loki*", "Jira/Bitbucket", "REST Apis", "Metabase", "MySQL", "Doctrine"
+      "*Docker*", "*SQL*", "*Git*", "Google Cloud", "*Systèmes Unix*", "*Grafana Loki*", "Jira/Bitbucket", "REST Apis", "Metabase", "MySQL", "Doctrine", "OVH Cloud", "Kubernetes"
     ]
   }
 }

@@ -1,3 +1,5 @@
+import platform
+import subprocess
 from datetime import datetime
 
 from config import Config
@@ -7,6 +9,22 @@ from services.document_service import (
     generate_resume_pdf,
 )
 from services.openai_service import get_prompts, query_openai
+
+
+def open_folder_in_explorer(folder_path):
+    """Open folder in system file explorer."""
+    try:
+        system = platform.system()
+        if system == "Windows":
+            subprocess.run(["explorer", str(folder_path)])
+        elif system == "Darwin":
+            subprocess.run(["open", str(folder_path)])
+        else:  # Linux
+            subprocess.run(["xdg-open", str(folder_path)])
+        return True
+    except Exception as e:
+        print(f"Error opening folder: {e}")
+        return False
 
 
 def generate_job_documents(company, job_title, job_content):
@@ -57,5 +75,7 @@ def generate_job_documents(company, job_title, job_content):
         with open(debug_file, "w", encoding="utf-8") as f:
             json.dump(debug_log, f, ensure_ascii=False, indent=2)
         print(f"Debug log created: {debug_file}")
+
+    open_folder_in_explorer(folder_path)
 
     return str(folder_path.absolute())
