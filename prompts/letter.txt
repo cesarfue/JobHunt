@@ -1,12 +1,23 @@
-
 # Instructions 
-Je vais te fournir une offre d’emploi. Adapte uniquement les passages entre {{}} de la lettre de motivation ci-dessous, en t’inspirant strictement de mes expériences, de ma formation et de l’offre d’emploi. 
-Consignes strictes :
-Ne modifie que les phrases entre {{}} et enlève les {{}} dans ta réponse.
-Respecte le ton, la structure et le style de la lettre modèle.
-Ne réponds que par la lettre de motivation finale, sans commentaire ni explication.
-Mets en avant les compétences et expériences les plus pertinentes par rapport à l’offre d’emploi.
+Je vais te fournir une offre d'emploi. Adapte uniquement les passages entre {{}} de la lettre de motivation ci-dessous, en t'inspirant strictement de mes expériences, de ma formation et de l'offre d'emploi. 
 
+## Consignes strictes :
+- Ne modifie que les phrases entre {{}} et enlève les {{}} dans ta réponse
+- Respecte le ton conversationnel, chaleureux et direct de la lettre modèle
+- Utilise des phrases courtes et fluides, évite les énumérations techniques
+- Varie les structures de phrases pour éviter la répétition de "je/j'ai"
+- Ne liste pas tes compétences, raconte ce que tu as fait concrètement
+- Privilégie les verbes d'action mais varie leur placement dans la phrase
+- Évite le jargon technique excessif et les parenthèses
+- Mets en avant 2-3 expériences maximum, de manière narrative et fluide
+- Ne réponds que par la lettre de motivation finale, sans commentaire ni explication
+
+## Ton et style à respecter :
+- Naturel et authentique, comme si tu parlais à quelqu'un
+- Confiant mais pas prétentieux
+- Précis sur les réalisations, sans être exhaustif
+- Fluide dans les transitions entre les idées
+- Varié dans la construction des phrases
 
 # Modèle 
 
@@ -24,11 +35,11 @@ Bonjour,
 Développeur full-stack et étudiant à l'École 42 Lyon, je vous soumets ma candidature pour {{type de contrat et poste}}, avec disponibilité à partir de janvier 2026. 
 Vous recherchez {{profil recherché, en quelques mots}} : je pense que mon profil sera à sa place au sein de votre équipe.
 
-Avec 3 ans d'expérience en développement, j'ai acquis une solide maîtrise du cycle complet de conception et déploiement d'applications web. Au sein d’Accopilot, {{parler de mes projets et expériences pertinentes, en 4-5 lignes, en lien direct avec l’offre d’emploi. Prioriser mon expérience chez Accopilot et sur les languages indiqués par l’offre d’emploi}}.
+Avec 3 ans d'expérience en développement, j'ai acquis une solide maîtrise du cycle complet de conception et déploiement d'applications web. Au sein d'Accopilot, {{parler de mes projets et expériences pertinentes, en 3-4 phrases fluides et naturelles, en lien direct avec l'offre d'emploi. Raconter concrètement ce que j'ai fait, sans lister les technologies entre parenthèses. Prioriser mon expérience chez Accopilot et les technologies demandées par l'offre. Mentionner 1-2 projets personnels uniquement s'ils sont très pertinents}}.
  
-Par ailleurs, mon parcours atypique constitue un atout pour vous. Ma formation juridique m'a conféré des capacités de rédaction et de synthèse que j'applique tous les jours, et mon engagement associatif m’a conféré de solides compétences en travail d’équipe et en organisation de projets. Je parle couramment anglais et sais travailler efficacement dans un environnement anglophone.
+Par ailleurs, mon parcours atypique constitue un atout pour vous. Ma formation juridique m'a conféré des capacités de rédaction et de synthèse que j'applique tous les jours, et mon engagement associatif m'a conféré de solides compétences en travail d'équipe et en organisation de projets. Je parle couramment anglais et sais travailler efficacement dans un environnement anglophone.
  
-Aujourd’hui, je souhaite à la fois approfondir mes compétences en développement full-stack au sein d’une structure encadrante, évoluer dans une équipe bienveillante et passionnée, et développer des projets riches de sens et à valeur sociale positive. Je serais donc ravi de pouvoir échanger avec vous pour discuter de ma candidature.
+Aujourd'hui, je souhaite à la fois approfondir mes compétences en développement full-stack au sein d'une structure encadrante, évoluer dans une équipe bienveillante et passionnée, et développer des projets riches de sens et à valeur sociale positive. Je serais donc ravi de pouvoir échanger avec vous pour discuter de ma candidature.
  
 Cordialement, 
  

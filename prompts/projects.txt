@@ -29,11 +29,11 @@ Privilégie les projets faits dans des languages explicitement mentionnées ou s
     }*,
     {
       "language": "Rust",
-      "description": "Implémentation d'une blochain simple"
+      "description": "Implémentation d'une blochain simple."
     },
     {
       "language": "TypeScript/React, Python/Flask",
-      "description": "Outil d'automatisation de candidatures : extraction d'offres, génération de documents personnalisés et suivi Excel"
+      "description": "Outil d'automatisation de candidatures : extraction d'offres, génération de documents personnalisés et suivi Excel."
     }
   ]
 }
