@@ -12,28 +12,39 @@ export const Skills = ({
 
     <div className="skills-container">
       <div>
-        {hard_skills.main.map((skill, i) => (
-          <p key={i}>
-            <span className="list-name">Principales</span> : {skill}
-          </p>
-        ))}
+        <p>
+          <span className="list-name">Principales</span> :{" "}
+          {hard_skills.main.map((skill, i) => (
+            <span key={i}>
+              {skill}
+              {i < hard_skills.main.length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </p>
       </div>
 
       <div>
-        {hard_skills.secondary.map((skill, i) => (
-          <p key={i}>
-            <span className="list-name">Secondaires</span> : {skill}
-          </p>
-        ))}
+        <p>
+          <span className="list-name">Secondaires</span> :{" "}
+          {hard_skills.secondary.map((skill, i) => (
+            <span key={i}>
+              {skill}
+              {i < hard_skills.secondary.length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </p>
       </div>
 
       <div>
-        {hard_skills.environmnent_and_tools.map((skill, i) => (
-          <p key={i}>
-            <span className="list-name">Environnements et outils</span> :{" "}
-            {skill}
-          </p>
-        ))}
+        <p>
+          <span className="list-name">Environnements et outils</span> :{" "}
+          {hard_skills.environment_and_tools.map((skill, i) => (
+            <span key={i}>
+              {skill}
+              {i < hard_skills.environment_and_tools.length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </p>
       </div>
 
       <div>

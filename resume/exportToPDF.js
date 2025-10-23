@@ -16,7 +16,7 @@ await page.pdf({
   path: outputPdfPath,
   format: "A4",
   printBackground: true,
-  // pageRanges: "1",
+  pageRanges: "2",
 });
 
 console.log(`PDF exported as ${outputPdfPath}`);

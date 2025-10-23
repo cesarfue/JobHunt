@@ -1,0 +1,21 @@
+## Instructions
+
+Je vais te fournir une offre d’emploi. Sélectionne et organise les 4 soft skills les plus pertinents parmi le JSON ci-dessous, en fonction des attentes et priorités de l’employeur. 
+Consignes strictes :
+Ne réponds que par le JSON comprenant les 4 soft skills sélectionnés et organisés par ordre de priorité, sous forme de JSON valide.
+Privilégie les compétences explicitement mentionnées ou sous-entendues dans l’offre d’emploi.
+
+## JSON
+
+{
+  "soft_skills": [
+    "Travail en groupe",
+    "Curiosité et veille technologique",
+    "Sensibilité UX/UI",
+    "Capacité de rédaction et de synthèse",
+    "Adaptabilité et apprentissage rapide",
+    "Esprit d’analyse et de synthèse",
+    "Initiative et proactivité",
+    "Esprit entrepreneurial"
+  ]
+}

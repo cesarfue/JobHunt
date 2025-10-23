@@ -38,7 +38,7 @@ export interface WorkExperience {
 export interface HardSkills {
   main: string[];
   secondary: string[];
-  environmnent_and_tools: string[];
+  environment_and_tools: string[];
 }
 
 export interface ResumeData {

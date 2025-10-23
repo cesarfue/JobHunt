@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Job Offer Exporter",
+  "name": "Overengineered Job Search",
   "description": "Export job offers as text files from job pages.",
   "version": "1.0",
   "permissions": ["activeTab", "scripting", "downloads", "storage", "tabs"],

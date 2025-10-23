@@ -10,10 +10,17 @@
   },
   "summary": "Développeur full-stack, je suis passionné par le développement d'applications à impact positif, les pratiques DevOps et IaC. Fort de trois ans d'expérience en programmation, principalement en Javascript/Typescript et PHP/Symfony, je suis à la recherche d’une équipe où mettre à profit mes compétences.",
   "hard_skills": {
-    "main": ["PHP/Symfony, Javascript/Typescript, React"],
-    "secondary": ["Python, Java, Angular, C/C++"],
-    "environmnent_and_tools": [
-      "Docker, SQL, Git, Systèmes Unix, Grafana Loki, Jira/Bitbucket, REST Apis, Metabase"
+    "main": ["PHP/Symfony", "Javascript/Typescript", "React"],
+    "secondary": ["Python", "Java", "Angular", "C/C++"],
+    "environment_and_tools": [
+      "Docker",
+      "SQL",
+      "Git",
+      "Systèmes Unix",
+      "Grafana Loki",
+      "Jira/Bitbucket",
+      "REST Apis",
+      "Metabase"
     ]
   },
   "soft_skills": [

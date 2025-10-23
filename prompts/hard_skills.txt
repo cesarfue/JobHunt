@@ -1,0 +1,26 @@
+## Instructions 
+
+Je vais te fournir une offre d’emploi. Adapte et réorganise la liste des languages et outils ci-dessous, en format JSON, pour correspondre aux priorités de l’employeur. 
+
+## Consignes strictes :
+
+Ne réponds que par le JSON reformulé, sans commentaire ni explication, sous forme de JSON valide
+Respecte les contraintes suivantes :
+Les lignes « main » et « secondary » ne doivent pas dépasser 7 mots-clés au total.
+La ligne “environment_and_tools” ne doit pas dépasser 9 mots-clés.
+Conserve obligatoirement les mots-clés entourés de «*».
+Tu peux réorganiser et changer de ligne les mots-clés des main et secondary, mais pas ceux des environment_and_tools.
+Supprime les «*» dans ta réponse.
+Mets en avant les technologies explicitement demandées ou suggérées par l’offre, sans en inventer.
+
+## JSON
+
+{
+  "hard_skills": {
+    "main": ["*PHP/Symfony*", "*Javascript/Typescript*", "*React*"],
+    "secondary": ["*Python*", "Java", "Angular", "*C/C++*", "Rust"],
+    "environment_and_tools": [
+      "*Docker*", "*SQL*", "*Git*", "Google Cloud", "*Systèmes Unix*", "*Grafana Loki*", "Jira/Bitbucket", "REST Apis", "Metabase", "MySQL", "Doctrine"
+    ]
+  }
+}

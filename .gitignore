@@ -3,4 +3,9 @@ backend/.DS_Store
 .DS_Store
 Recherche Janvier 2026.xlsx
 Candidatures/
+Applications/
 resume/resume.pdf
+backend/services/__pycache__
+backend/__pycache__
+backend/routes/__pycache__
+resume/public/resume_overrides

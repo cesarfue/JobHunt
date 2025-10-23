@@ -55,7 +55,7 @@ export function useResumeData() {
             console.log(`✅ Merged ${fileName} from override`);
           }
         });
-
+        console.log(data);
         setResumeData(data);
         setLoading(false);
       })
