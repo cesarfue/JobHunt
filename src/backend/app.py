@@ -1,7 +1,6 @@
+from config import Config
 from flask import Flask
 from flask_cors import CORS
-
-from config import Config
 from routes import job_routes
 
 app = Flask(__name__)
@@ -19,11 +18,11 @@ CORS(
 app.register_blueprint(job_routes.bp)
 
 if __name__ == "__main__":
-    Config.CANDIDATURES_DIR.mkdir(exist_ok=True)
+    Config.APPLICATIONS_DIR.mkdir(exist_ok=True)
     Config.PROMPTS_DIR.mkdir(exist_ok=True)
 
     print(f"Server starting...")
-    print(f"Applications folder: {Config.CANDIDATURES_DIR}")
+    print(f"Applications folder: {Config.APPLICATIONS_DIR}")
     print(f"Prompts folder: {Config.PROMPTS_DIR}")
     print(f"Excel file: {Config.EXCEL_FILE}")
     print(f"Resume script: {Config.RESUME_SCRIPT}")

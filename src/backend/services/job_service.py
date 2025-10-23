@@ -18,8 +18,16 @@ def generate_job_documents(company, job_title, job_content):
 
     today = datetime.now()
     formatted_date = today.strftime("%Y-%m-%d")
-    folder_name = f"{company} - {formatted_date}"
-    folder_path = Config.CANDIDATURES_DIR / folder_name
+
+    base_folder_name = f"{company} - {formatted_date}"
+    folder_path = Config.APPLICATIONS_DIR / base_folder_name
+
+    counter = 1
+    while folder_path.exists():
+        folder_name = f"{base_folder_name} ({counter})"
+        folder_path = Config.APPLICATIONS_DIR / folder_name
+        counter += 1
+
     folder_path.mkdir(parents=True, exist_ok=True)
 
     if "letter" in results:

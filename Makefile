@@ -6,11 +6,11 @@ up:
 
 dev:
 	@echo "Starting Vite dev server..."
-	@cd resume && npm run dev
+	@cd src/resume && npm run dev
 
 backend:
 	@echo "Starting Flask backend..."
-	@cd backend && source ./.venv/bin/activate && python app.py
+	@cd src/backend && source ./.venv/bin/activate && python app.py
 
 down:
 	@echo "Stopping services..."
