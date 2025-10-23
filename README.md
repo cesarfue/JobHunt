@@ -7,7 +7,7 @@ OverengineeredJobSearch automates (my) job applications by generating customized
 - A Chrome extension frontend, which sends web page text (i.e : job offers) to the backend
 - A Flask backend
 - My resume in React
-- And it keeps track of the applications in a excel sheet.
+- Keeping track of the applications in a excel sheet
 
 ## Project Structure
 
