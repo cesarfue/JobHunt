@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -31,6 +32,10 @@ BASE_DIR = Path(__file__).parent.parent
 CANDIDATURES_DIR = BASE_DIR / "Applications"
 PROMPTS_DIR = BASE_DIR / "prompts"
 EXCEL_FILE = BASE_DIR / "Recherche Janvier 2026.xlsx"
+RESUME_DIR = BASE_DIR / "resume"
+RESUME_JSON = RESUME_DIR / "public" / "resume.json"
+RESUME_SCRIPT = RESUME_DIR / "exportToPDF.js"
+PHOTO_PATH = RESUME_DIR / "src" / "assets" / "photo.jpeg"
 DEBUG_MODE = False
 
 client = OpenAI(api_key=API_KEY)
@@ -97,7 +102,7 @@ def add_to_excel(company, platform, job_title, url, date):
 
         new_row_data = ["A faire", "CDI", company, platform, job_title, url, date, ""]
         ws.append(new_row_data)
-        new_row_idx = ws.max_row  # the row we just added
+        new_row_idx = ws.max_row
 
         for col in range(1, len(new_row_data) + 1):
             ws.cell(row=new_row_idx, column=col).font = Font(name="Roboto", size=10)
@@ -126,10 +131,6 @@ def add_to_excel(company, platform, job_title, url, date):
 
 
 def create_letter_doc(folder_path, content):
-    from docx import Document
-    from docx.enum.text import WD_ALIGN_PARAGRAPH
-    from docx.shared import Pt
-
     doc = Document()
 
     style = doc.styles["Normal"]
@@ -157,34 +158,98 @@ def create_letter_doc(folder_path, content):
     doc.save(folder_path / "Lettre de motivation César Fuentes.docx")
 
 
-def create_skills_doc(folder_path, company, date, results, prompts):
-    doc = Document()
+def create_skills_json(folder_path, results):
+    """Create a JSON file with the skills data"""
+    skills_data = {
+        "hard_skills": {
+            "main": [results["HARD_SKILLS"].split(",")[0].strip()],
+            "secondary": (
+                [
+                    skill.strip()
+                    for skill in results["HARD_SKILLS"].split(",")[1].split(",")
+                    if skill.strip()
+                ]
+                if "," in results["HARD_SKILLS"]
+                and len(results["HARD_SKILLS"].split(",")) > 1
+                else []
+            ),
+            "environmnent_and_tools": (
+                [
+                    skill.strip()
+                    for skill in results["HARD_SKILLS"].split(",")[2].split(",")
+                    if skill.strip()
+                ]
+                if "," in results["HARD_SKILLS"]
+                and len(results["HARD_SKILLS"].split(",")) > 2
+                else []
+            ),
+        },
+        "soft_skills": [
+            skill.strip()
+            for skill in results["SOFT_SKILLS"].split("\n")
+            if skill.strip()
+        ],
+    }
 
-    if DEBUG_MODE:
-        doc.add_heading("🔍 DEBUG INFORMATION", level=1)
-        for key, prompt in prompts.items():
-            doc.add_heading(f"{key} Prompt", level=3)
-            doc.add_paragraph(prompt)
-            doc.add_paragraph("---")
-        doc.add_page_break()
-        doc.add_heading("📄 GENERATED CONTENT", level=1)
+    with open(folder_path / "skills.json", "w", encoding="utf-8") as f:
+        json.dump(skills_data, f, ensure_ascii=False, indent=2)
 
-    doc.add_heading("RESUME", level=2)
-    p1 = doc.add_paragraph("Dupliquer le CV Base sur Canva :")
-    p1.add_run().add_break()
-    doc.add_paragraph(
-        "https://www.canva.com/design/DAGqB80W4ws/Ux_BjIm0NhGcFcCL3VQBoA/edit"
-    )
-    doc.add_paragraph(f'→ Renommer la copie : "{company} - {date}"')
-    doc.add_paragraph()
+    print(f"✅ Skills JSON created: {folder_path / 'skills.json'}")
 
-    doc.add_heading("HARD SKILLS", level=2)
-    doc.add_paragraph(results["HARD_SKILLS"])
 
-    doc.add_heading("SOFT SKILLS", level=2)
-    doc.add_paragraph(results["SOFT_SKILLS"])
+def generate_resume_pdf(folder_path, company, date):
+    """Generate a PDF resume with custom skills from skills.json"""
+    try:
+        # Read base resume data
+        with open(RESUME_JSON, "r", encoding="utf-8") as f:
+            resume_data = json.load(f)
 
-    doc.save(folder_path / "Compétences.docx")
+        # Read custom skills
+        skills_json_path = folder_path / "skills.json"
+        if skills_json_path.exists():
+            with open(skills_json_path, "r", encoding="utf-8") as f:
+                custom_skills = json.load(f)
+
+            # Replace skills in resume data
+            resume_data["hard_skills"] = custom_skills["hard_skills"]
+            resume_data["soft_skills"] = custom_skills["soft_skills"]
+
+        # Create temporary resume JSON for this application
+        temp_resume_path = folder_path / "resume_temp.json"
+        with open(temp_resume_path, "w", encoding="utf-8") as f:
+            json.dump(resume_data, f, ensure_ascii=False, indent=2)
+
+        # Output PDF path
+        output_pdf = folder_path / f"CV César Fuentes.pdf"
+
+        # Call Node.js script to generate PDF
+        result = subprocess.run(
+            [
+                "node",
+                str(RESUME_SCRIPT),
+                str(temp_resume_path),
+                str(output_pdf),
+                str(PHOTO_PATH) if PHOTO_PATH.exists() else "",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        print(result.stdout)
+
+        # Clean up temporary file
+        temp_resume_path.unlink()
+
+        print(f"✅ Resume PDF generated: {output_pdf}")
+        return str(output_pdf)
+
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error generating PDF: {e.stderr}")
+        raise
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        raise
 
 
 def generate_job_documents(company, job_title, job_content):
@@ -200,8 +265,14 @@ def generate_job_documents(company, job_title, job_content):
     folder_path = CANDIDATURES_DIR / folder_name
     folder_path.mkdir(parents=True, exist_ok=True)
 
+    # Create letter
     create_letter_doc(folder_path, results["LETTER"])
-    create_skills_doc(folder_path, company, formatted_date, results, prompts)
+
+    # Create skills JSON (instead of Word doc)
+    create_skills_json(folder_path, results)
+
+    # Generate PDF resume with custom skills
+    generate_resume_pdf(folder_path, company, formatted_date)
 
     return str(folder_path.absolute())
 
@@ -243,5 +314,6 @@ if __name__ == "__main__":
     print(f"Applications folder: {CANDIDATURES_DIR}")
     print(f"Prompts folder: {PROMPTS_DIR}")
     print(f"Excel file: {EXCEL_FILE}")
+    print(f"Resume script: {RESUME_SCRIPT}")
 
     app.run(debug=True, port=5000)
