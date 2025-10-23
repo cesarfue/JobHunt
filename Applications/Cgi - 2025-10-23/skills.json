@@ -1,0 +1,15 @@
+{
+  "hard_skills": {
+    "main": [
+      "Stack principale : Javascript/Typescript | Angular | Java | Python | React\nStack secondaire : PHP/Symfony | NodeJS | C/C++\nEnvironnement & Outils : Docker | SQL | AWS | REST Apis | Jira/Bitbucket | Git | Systèmes Unix | Grafana Loki | MySQL"
+    ],
+    "secondary": [],
+    "environmnent_and_tools": []
+  },
+  "soft_skills": [
+    "Travail en groupe",
+    "Esprit d’analyse et de synthèse",
+    "Initiative et proactivité",
+    "Adaptabilité et apprentissage rapide"
+  ]
+}

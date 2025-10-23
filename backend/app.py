@@ -200,49 +200,65 @@ def create_skills_json(folder_path, results):
 def generate_resume_pdf(folder_path, company, date):
     """Generate a PDF resume with custom skills from skills.json"""
     try:
-        # Read base resume data
-        with open(RESUME_JSON, "r", encoding="utf-8") as f:
-            resume_data = json.load(f)
+        # Create resume_overrides directory in public folder
+        overrides_dir = RESUME_DIR / "public" / "resume_overrides"
+        overrides_dir.mkdir(exist_ok=True)
 
-        # Read custom skills
+        # Path to skills.json
         skills_json_path = folder_path / "skills.json"
+
+        # Copy skills.json to overrides folder if it exists
         if skills_json_path.exists():
+            import shutil
+
             with open(skills_json_path, "r", encoding="utf-8") as f:
-                custom_skills = json.load(f)
+                skills_data = json.load(f)
 
-            # Replace skills in resume data
-            resume_data["hard_skills"] = custom_skills["hard_skills"]
-            resume_data["soft_skills"] = custom_skills["soft_skills"]
+            # Copy hard_skills if exists
+            if "hard_skills" in skills_data:
+                hard_skills_path = overrides_dir / "hard_skills.json"
+                with open(hard_skills_path, "w", encoding="utf-8") as f:
+                    json.dump(
+                        skills_data["hard_skills"], f, ensure_ascii=False, indent=2
+                    )
+                print(f"✅ Copied hard_skills.json to overrides folder")
 
-        # Create temporary resume JSON for this application
-        temp_resume_path = folder_path / "resume_temp.json"
-        with open(temp_resume_path, "w", encoding="utf-8") as f:
-            json.dump(resume_data, f, ensure_ascii=False, indent=2)
+            # Copy soft_skills if exists
+            if "soft_skills" in skills_data:
+                soft_skills_path = overrides_dir / "soft_skills.json"
+                with open(soft_skills_path, "w", encoding="utf-8") as f:
+                    json.dump(
+                        skills_data["soft_skills"], f, ensure_ascii=False, indent=2
+                    )
+                print(f"✅ Copied soft_skills.json to overrides folder")
 
-        # Output PDF path
-        output_pdf = folder_path / f"CV César Fuentes.pdf"
+        try:
+            # Output PDF path
+            output_pdf = folder_path / f"CV César Fuentes.pdf"
 
-        # Call Node.js script to generate PDF
-        result = subprocess.run(
-            [
-                "node",
-                str(RESUME_SCRIPT),
-                str(temp_resume_path),
-                str(output_pdf),
-                str(PHOTO_PATH) if PHOTO_PATH.exists() else "",
-            ],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+            # Call Node.js script to generate PDF
+            result = subprocess.run(
+                [
+                    "node",
+                    str(RESUME_SCRIPT),
+                    str(output_pdf),
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
 
-        print(result.stdout)
+            print(result.stdout)
+            print(f"✅ Resume PDF generated: {output_pdf}")
+            return str(output_pdf)
 
-        # Clean up temporary file
-        temp_resume_path.unlink()
+        finally:
+            # Clean up: remove all files from overrides folder
+            if overrides_dir.exists():
+                import shutil
 
-        print(f"✅ Resume PDF generated: {output_pdf}")
-        return str(output_pdf)
+                shutil.rmtree(overrides_dir)
+                print(f"✅ Cleaned up resume_overrides folder")
 
     except subprocess.CalledProcessError as e:
         print(f"❌ Error generating PDF: {e.stderr}")
