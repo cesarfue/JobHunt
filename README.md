@@ -4,12 +4,12 @@ Tired of sending dozens of cover letters to get an internship ? Scared of waitin
 
 OverengineeredJobSearch automates (my) job applications by generating customized resumes and cover letters. It involves : 
 
+- A Chrome extension frontend, which sends web page text (i.e : job offers) to the backend
 - A Flask backend
-- A Chrome extension frontend
 - My resume in React
-- And it keeps track of the applications in a excel sheet. 
+- And it keeps track of the applications in a excel sheet.
 
-Project Structure
+## Project Structure
 
 ```
 OverengineeredJobSearch/
@@ -19,4 +19,5 @@ OverengineeredJobSearch/
 │   ├── backend/          # Flask API server
 │   ├── chrome-extension/ # Browser extension
 │   └── resume/           # Resume generator (React)
+|__ Makefile
 ```
