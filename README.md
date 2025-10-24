@@ -10,7 +10,7 @@ OverengineeredJobSearch automates (my) job applications by generating customized
 
 ## Process
 
-- The extension sends a web page to the Flask API
+- The extension sends a web page to the Flask API (i.e : a job offer)
 - The backend parses the received web page (1st OpenAI call)
 - It generates an entry in an excel sheet to keep track of the applications
 - Makes a cover letter using prompts/letter.txt (2nd OpenAI call)
