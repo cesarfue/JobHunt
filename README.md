@@ -4,10 +4,18 @@ Tired of sending dozens of cover letters to get an internship ? Scared of waitin
 
 OverengineeredJobSearch automates (my) job applications by generating customized resumes and cover letters. It involves : 
 
-- A Chrome extension frontend, which sends web page text (i.e : job offers) to the backend
+- A Chrome extension frontend
 - A Flask backend
-- My resume in React
-- Keeping track of the applications in a excel sheet
+- My resume in React 
+
+## Process
+
+- The extension sends a web page to the Flask API
+- The backend parses the received web page (1st OpenAI call)
+- It generates an entry in an excel sheet to keep track of the applications
+- Makes a cover letter using prompts/letter.txt (2nd OpenAI call)
+- Generates an overrides.json based on the other prompts/ files (one OpenAI call for each)
+- Call a Node script that export the resume in pdf, based on resume.json and overrides.json data
 
 ## Project Structure
 
