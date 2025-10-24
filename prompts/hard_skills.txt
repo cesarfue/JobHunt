@@ -16,7 +16,7 @@ Je vais te fournir une offre d'emploi. Adapte la liste des compétences ci-desso
 
 - Compétences secondaires (langages/frameworks) : {Python}, {Java/Springboot}, Angular, {C/C++}, Rust
 
-- Environnements et outils : {Docker}, {SQL}, {Git}, Google Cloud, {Systèmes Unix}, {Grafana Loki}, Jira/Bitbucket, REST Apis, Metabase, MySQL, Doctrine, OVH Cloud, Kubernetes
+- Environnements et outils : {Docker}, {SQL}, {Git}, Google Cloud, {Systèmes Unix}, {Grafana Loki}, Jira/Bitbucket, REST Apis, Metabase, MySQL, Doctrine, OVH Cloud, Kubernetes, Terraform
 
 ## Format de réponse attendu
 Réponds UNIQUEMENT avec un JSON valide suivant cette structure exacte, sans texte avant ou après :

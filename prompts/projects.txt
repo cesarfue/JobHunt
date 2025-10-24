@@ -29,7 +29,7 @@ Privilégie les projets faits dans des languages explicitement mentionnées ou s
     }*,
     {
       "language": "Rust",
-      "description": "Implémentation d'une blochain simple."
+      "description": "Implémentation d'une blockchain simple."
     },
     {
       "language": "TypeScript/React, Python/Flask",
