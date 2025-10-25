@@ -34,7 +34,7 @@ Si tu inclue le projet 'automatisation de candidatures', mets le toujours à la 
     },
     {
       "language": "TypeScript/React, Python/Flask",
-      "description": "Outil d'automatisation de candidatures : extraction d'offres, génération de documents personnalisés et suivi Excel."
+      "description": "Outil d'automatisation de candidatures : extraction d'offres, génération de documents et suivi Excel."
     }
   ]
 }
