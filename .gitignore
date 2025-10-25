@@ -22,3 +22,4 @@ resume/public/resume_overrides
 src/resume/resume.pdf
 src/resume/public/resume_overrides
 src/resume/node_modules
+src/resume/*.pdf
