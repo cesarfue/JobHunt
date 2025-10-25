@@ -6,6 +6,7 @@ Ne réponds que par le JSON comprenant les 4 projets sélectionnés et organisé
 Conserve obligatoirement les projets entourés de «*».
 Supprime les «*» dans ta réponse.
 Privilégie les projets faits dans des languages explicitement mentionnées ou sous-entendues dans l’offre d’emploi.
+Si tu inclue le projet 'automatisation de candidatures', mets le toujours à la fin
 
 ## JSON
 
