@@ -12,9 +12,26 @@ API_KEY = os.getenv("API_KEY")
 client = OpenAI(api_key=API_KEY)
 
 
-def query_openai(prompt):
+def load_resume_data():
+    try:
+        with open(Config.RESUME_JSON, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading resume.json: {e}")
+        return None
+
+
+def query_openai(prompt, include_resume=False):
+    full_prompt = prompt
+
+    if include_resume:
+        resume_data = load_resume_data()
+        if resume_data:
+            resume_json = json.dumps(resume_data, ensure_ascii=False, indent=2)
+            full_prompt = f"{prompt}\n\n# Mon CV (JSON)\n\n{resume_json}"
+
     response = client.chat.completions.create(
-        model="gpt-5", messages=[{"role": "user", "content": prompt}]
+        model="gpt-5", messages=[{"role": "user", "content": full_prompt}]
     )
     return response.choices[0].message.content.strip()
 
@@ -25,7 +42,7 @@ def extract_job_info(content):
 {{
   "company": "Nom de la société qui poste l'offre d'emploi",
   "job_title": "Intitulé du poste",
-  "platform": "Plateforme d'offres d'emploi, en un mot",
+  "platform": "Plateforme d'offres d'emploi, en un mot (ex: Hellowork, Welcometothejungle, etc)",
   "job_description": "Contenu de l'offre d'emploi et du profil recherché"
 }}
 Offre d'emploi:

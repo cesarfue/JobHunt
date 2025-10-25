@@ -35,18 +35,25 @@ def generate_job_documents(company, job_title, job_content):
 
     for key, prompt in prompts.items():
         full_prompt = f"{prompt}\n\n## Job content\n{job_content}"
-        answer = query_openai(full_prompt)
+
+        include_resume = key == "letter"
+        answer = query_openai(full_prompt, include_resume=include_resume)
         results[key] = answer
 
         if Config.DEBUG_MODE:
-            debug_log.append(
-                {
-                    "key": key,
-                    "prompt": full_prompt,
-                    "answer": answer,
-                    "timestamp": datetime.now().isoformat(),
-                }
-            )
+            from services.openai_service import load_resume_data
+
+            debug_entry = {
+                "key": key,
+                "prompt": full_prompt,
+                "answer": answer,
+                "timestamp": datetime.now().isoformat(),
+            }
+
+            if include_resume:
+                debug_entry["resume_data"] = load_resume_data()
+
+            debug_log.append(debug_entry)
 
     today = datetime.now()
     formatted_date = today.strftime("%Y-%m-%d")

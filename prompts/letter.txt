@@ -1,7 +1,6 @@
 # Instructions 
-Je vais te fournir une offre d'emploi. Adapte uniquement les passages entre {{}} de la lettre de motivation ci-dessous, en t'inspirant strictement de mes expériences, de ma formation et de l'offre d'emploi. 
+Je vais te fournir une offre d'emploi. Adapte uniquement les passages entre {{}} du modèle de lettre de motivation ci-dessous, en t'inspirant strictement de mon CV et de l'offre d'emploi. 
 
-## Consignes strictes :
 - Ne modifie que les phrases entre {{}} et enlève les {{}} dans ta réponse
 - Respecte le ton conversationnel, chaleureux et direct de la lettre modèle
 - Évite le jargon technique excessif et les parenthèses
@@ -35,69 +34,3 @@ Cordialement,
  
 
 César Fuentes
-
-
-# Expériences et formations
-
-## Projets réalisés
-
-Swift: Développement d’un outil de speech-to-text utilisant le modèle Whisper d’Open AI
-Python: Création de serveurs basés sur le protocole MCP
-C/C++: Implémentation d’un server IRC avec intégration d’un modèle d’IA via l’API de HuggingFace
-Javascript/ThreeJs, Python/Django: Jeu de pong en 3D avec multijoueur via WebSockets, server-side, gestions d’amis, entre autres services
-Rust: Implémentation d’une blockchain simple
-Java/Springboot, Angular: Développement d’une application de comptabilité pour association
-
-
-## Formation
-
-Concepteur développeur de solutions informatiques - Spécialisation Développement web & mobile (niveau RNCP 6), Ecole 42, Lyon, Septembre 2023 - Aujourd’hui
-
-
-Apprentissage de l’ingénierie logicielle avec une pédagogie axée sur le peer-to-
-peer learning et réalisation de multiples projets en C, C++ et Javascript.
-
-
-Classe préparatoire aux concours de journalisme, ESJ Lille, en ligne, Septembre 2022 – Juin 2023
-
-
-Apprentissage du data journalisme et de la data visualization durant une année
-transitoire. Conception d’infographies interactives en JavaScript et D3.js
-
-
-Master 1, Droit International et Droit Européen, Université d’Aix-Marseille, Aix-en-Provence, Septembre 2021 – Juillet 2022
-
-
-Spécialisation en droit international public et droit fiscal international.
-
-
-Licence de droit, Droit Public, Université Paris II Panthéon-Assas, Melun, Septembre 2018 – Juin 2022
-
-
-Acquisition de connaissances juridiques pluridisciplinaires au cours d’une
-licence de droit de trois ans. Spécialisation en droit public en troisième année.
-
-
-
-
-## Expérience Professionnelle 
-
-
-Développeur full-stack, Accopilot, Arnas, Juillet 2025 - Aujourd’hui
-
-
-Développement de fonctionnalités dans un environnement agile, en PHP/Symfony et React. Mise en place d’un outil de centralisation des logs (Grafana Loki). 
-
-
-Secrétaire général et Vice-trésorier, Gâtinais Libre, Montargis, Décembre 2022 – Aujourd’hui
-
-
-Création et organisation d'initiatives culturelles au sein d’une association. Budgétisation (Basicompta, Excel), comptabilité générale, relations avec les pouvoirs publics.
-
-
-Game Master, Les Coqs en Pâte, Paris | Imaginarium, Lyon, Septembre 2022 – Janvier 2024
-
-
-Suivi d’équipes, acting et relation client au sein de 2 escapes games. Amélioration des capacités de résolution de problèmes des équipes
-
-
