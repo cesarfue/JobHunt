@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from datetime import datetime
 
 from config import Config
 from dotenv import load_dotenv
@@ -76,3 +77,41 @@ def get_prompts():
             prompts[key] = f.read().strip()
 
     return prompts
+
+
+def submit_prompts(job_content, folder_path):
+    prompts = get_prompts()
+    debug_log = []
+    results = {}
+
+    for key, prompt in prompts.items():
+        full_prompt = f"{prompt}\n\n## Job content\n{job_content}"
+
+        include_resume = key == "letter"
+        answer = query_openai(full_prompt, include_resume=include_resume)
+        results[key] = answer
+
+        if Config.DEBUG_MODE:
+            from services.openai_service import load_resume_data
+
+            debug_entry = {
+                "key": key,
+                "prompt": full_prompt,
+                "answer": answer,
+                "timestamp": datetime.now().isoformat(),
+            }
+
+            if include_resume:
+                debug_entry["resume_data"] = load_resume_data()
+
+            debug_log.append(debug_entry)
+
+    if Config.DEBUG_MODE and debug_log:
+        import json
+
+        debug_file = folder_path / "debug_log.json"
+        with open(debug_file, "w", encoding="utf-8") as f:
+            json.dump(debug_log, f, ensure_ascii=False, indent=2)
+        print(f"Debug log created: {debug_file}")
+
+    return results
