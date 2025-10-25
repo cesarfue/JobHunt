@@ -7,7 +7,7 @@ Je vais te fournir une offre d'emploi. Adapte la liste des compétences ci-desso
 - Les environnements et outils vont dans "environment_and_tools" uniquement
 - Mets en avant les compétences explicitement demandées ou suggérées par l'offre
 - N'invente aucune compétence qui ne figure pas dans la liste ci-dessous
-- Maximum 9 compétences dans "environment_and_tools"
+- 9 compétences dans "environment_and_tools"
 - Supprime les {} dans ta réponse finale
 
 ## Liste des compétences disponibles
@@ -16,7 +16,7 @@ Je vais te fournir une offre d'emploi. Adapte la liste des compétences ci-desso
 
 - Compétences secondaires (langages/frameworks) : {Python}, {Java/Springboot}, Angular, {C/C++}, Rust
 
-- Environnements et outils : {Docker}, {SQL}, {Git}, Google Cloud, {Systèmes Unix}, {Grafana Loki}, Jira/Bitbucket, REST Apis, Metabase, MySQL, Doctrine, OVH Cloud, Kubernetes, Terraform
+- Environnements et outils : {Docker}, {SQL}, {Git}, Google Cloud, {Systèmes Unix}, {Grafana Loki}, Jira/Bitbucket, REST Apis, Metabase, MySQL, Doctrine, OVH Cloud, Kubernetes, Terraform, Maven
 
 ## Format de réponse attendu
 Réponds UNIQUEMENT avec un JSON valide suivant cette structure exacte, sans texte avant ou après :
