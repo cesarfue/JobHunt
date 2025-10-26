@@ -7,56 +7,32 @@ export function useResumeData() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // List of possible override files to check
-    const overrideFiles = [
-      "hard_skills",
-      "soft_skills",
-      "summary",
-      "projects",
-      "education",
-      "work_experience",
-      "languages",
-      "interests",
-      "basics",
-    ];
-
-    // First, fetch the base resume.json
     fetch("/resume.json")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load resume data");
         return res.json();
       })
-      .then(async (data: ResumeData) => {
-        // Try to fetch each override file
-        const overridePromises = overrideFiles.map(async (fileName) => {
-          try {
-            const res = await fetch(`/resume_overrides/${fileName}.json`);
-            if (res.ok) {
-              const overrideData = await res.json();
-              console.log(`✅ Loaded override: ${fileName}.json`);
-              return { fileName, data: overrideData };
-            }
-          } catch (err) {
-            // File doesn't exist, that's okay
-            return null;
-          }
-          return null;
-        });
+      .then(async (data: any) => {
+        try {
+          const overridesRes = await fetch("/overrides.json");
+          if (overridesRes.ok) {
+            const overrides = await overridesRes.json();
 
-        // Wait for all override fetches to complete
-        const overrides = await Promise.all(overridePromises);
-
-        // Merge overrides into the base data
-        overrides.forEach((override) => {
-          if (override) {
-            const { fileName, data: overrideData } = override;
-            // Replace the field in resumeData with the override data
-            (data as any)[fileName] = overrideData;
-            console.log(`✅ Merged ${fileName} from override`);
+            Object.keys(overrides).forEach((key) => {
+              if (data.resume && data.resume[key]) {
+                data.resume[key] = overrides[key];
+                console.log(`Merged ${key} from override`);
+              }
+            });
+          } else {
+            console.log("No overrides.json found, using default resume.json");
           }
-        });
-        console.log(data);
-        setResumeData(data);
+        } catch (err) {
+          console.log("No overrides.json available, using default resume.json");
+        }
+
+        console.log("Final resume data:", data.resume);
+        setResumeData(data.resume);
         setLoading(false);
       })
       .catch((err) => {

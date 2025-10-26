@@ -1,0 +1,181 @@
+{
+  "hard_skills": {
+    "main": [
+      {
+        "name": "Javascript/Typescript",
+        "mandatory": true,
+        "score": 0.75
+      },
+      {
+        "name": "React",
+        "mandatory": true,
+        "score": 0.6
+      },
+      {
+        "name": "PHP/Symfony",
+        "mandatory": true,
+        "score": 0.2
+      }
+    ],
+    "secondary": [
+      {
+        "name": "Java/Springboot",
+        "mandatory": true,
+        "score": 1.0
+      },
+      {
+        "name": "Angular",
+        "score": 1.0
+      },
+      {
+        "name": "Python",
+        "mandatory": true,
+        "score": 0.5
+      },
+      {
+        "name": "Rust",
+        "score": 0.3
+      },
+      {
+        "name": "Bootstrap",
+        "score": 0.25
+      },
+      {
+        "name": "TailwindCSS",
+        "score": 0.25
+      },
+      {
+        "name": "C/C++",
+        "mandatory": true,
+        "score": 0.2
+      }
+    ],
+    "environment_and_tools": [
+      {
+        "name": "Git",
+        "mandatory": true,
+        "score": 0.75
+      },
+      {
+        "name": "SQL",
+        "mandatory": true,
+        "score": 0.6
+      },
+      {
+        "name": "REST Apis",
+        "score": 0.6
+      },
+      {
+        "name": "Docker",
+        "mandatory": true,
+        "score": 0.5
+      },
+      {
+        "name": "Systèmes Unix",
+        "mandatory": true,
+        "score": 0.5
+      },
+      {
+        "name": "MySQL",
+        "score": 0.4
+      },
+      {
+        "name": "Jira/Bitbucket",
+        "score": 0.35
+      },
+      {
+        "name": "Maven",
+        "score": 0.25
+      },
+      {
+        "name": "Google Cloud",
+        "score": 0.2
+      },
+      {
+        "name": "Grafana Loki",
+        "mandatory": true,
+        "score": 0.1
+      },
+      {
+        "name": "Metabase",
+        "score": 0.1
+      },
+      {
+        "name": "Doctrine",
+        "score": 0.1
+      },
+      {
+        "name": "OVH Cloud",
+        "score": 0.1
+      },
+      {
+        "name": "Kubernetes",
+        "score": 0.1
+      },
+      {
+        "name": "Terraform",
+        "score": 0.1
+      }
+    ]
+  },
+  "soft_skills": [
+    {
+      "name": "Travail en groupe",
+      "score": 0.9
+    },
+    {
+      "name": "Curiosité et veille technologique",
+      "mandatory": true,
+      "score": 0.8
+    },
+    {
+      "name": "Esprit d'analyse et de synthèse",
+      "score": 0.8
+    },
+    {
+      "name": "Adaptabilité et apprentissage rapide",
+      "score": 0.75
+    },
+    {
+      "name": "Initiative et proactivité",
+      "score": 0.7
+    },
+    {
+      "name": "Sensibilité UX/UI",
+      "score": 0.5
+    }
+  ],
+  "projects": [
+    {
+      "language": "Java/Springboot, Angular",
+      "description": "Développement d’une application de comptabilité pour association.",
+      "score": 1.0
+    },
+    {
+      "language": "TypeScript/React, Python/Flask",
+      "description": "Outil d'automatisation de candidatures : extraction d'offres, génération de documents et suivi Excel.",
+      "is_last": true,
+      "score": 0.75
+    },
+    {
+      "language": "Javascript/ThreeJs, Python/Django",
+      "description": "Jeu de pong en 3D avec multijoueur via WebSockets, server-side, gestions d’amis, entre autres services.",
+      "score": 0.6
+    },
+    {
+      "language": "Python",
+      "description": "Création de serveurs basés sur le protocole MCP.",
+      "score": 0.5
+    },
+    {
+      "language": "Rust",
+      "description": "Implémentation d'une blockchain simple.",
+      "score": 0.3
+    },
+    {
+      "language": "Swift",
+      "description": "Développement d’un outil de speech-to-text utilisant le modèle Whisper d’Open AI.",
+      "score": 0.2
+    }
+  ]
+}

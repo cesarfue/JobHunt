@@ -5,7 +5,9 @@ export const Skills = ({
   soft_skills,
 }: {
   hard_skills: HardSkills;
-  soft_skills: string[];
+  soft_skills: Array<
+    string | { name: string; score?: number; mandatory?: boolean }
+  >;
 }) => (
   <section>
     <h2>Compétences techniques</h2>
@@ -16,7 +18,7 @@ export const Skills = ({
           <span className="list-name">Principales</span> :{" "}
           {hard_skills.main.map((skill, i) => (
             <span key={i}>
-              {skill}
+              {typeof skill === "string" ? skill : skill.name}
               {i < hard_skills.main.length - 1 ? ", " : ""}
             </span>
           ))}
@@ -28,7 +30,7 @@ export const Skills = ({
           <span className="list-name">Secondaires</span> :{" "}
           {hard_skills.secondary.map((skill, i) => (
             <span key={i}>
-              {skill}
+              {typeof skill === "string" ? skill : skill.name}
               {i < hard_skills.secondary.length - 1 ? ", " : ""}
             </span>
           ))}
@@ -40,7 +42,7 @@ export const Skills = ({
           <span className="list-name">Environnements et outils</span> :{" "}
           {hard_skills.environment_and_tools.map((skill, i) => (
             <span key={i}>
-              {skill}
+              {typeof skill === "string" ? skill : skill.name}
               {i < hard_skills.environment_and_tools.length - 1 ? ", " : ""}
             </span>
           ))}
@@ -51,7 +53,7 @@ export const Skills = ({
         <h2>Soft Skills</h2>
         <ul>
           {soft_skills.map((skill, i) => (
-            <li key={i}>{skill}</li>
+            <li key={i}>{typeof skill === "string" ? skill : skill.name}</li>
           ))}
         </ul>
       </div>

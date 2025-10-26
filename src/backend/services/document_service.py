@@ -1,107 +1,89 @@
-import json
-import shutil
-import subprocess
+import traceback
+from pathlib import Path
 
+import openpyxl
 from config import Config
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
+from openpyxl.styles import Font
 
 
-def create_letter_doc(folder_path, content):
-    doc = Document()
-
-    style = doc.styles["Normal"]
-    font = style.font
-    font.name = "Times New Roman"
-    font.size = Pt(11)
-    style.paragraph_format.space_after = Pt(0)
-    style.paragraph_format.space_before = Pt(0)
-    style.paragraph_format.line_spacing = 1.0
-
-    lines = [line.rstrip() for line in content.split("\n")]
-
-    for i, line in enumerate(lines, start=1):
-        p = doc.add_paragraph(line)
-        p.paragraph_format.space_after = Pt(0)
-        p.paragraph_format.space_before = Pt(0)
-
-        if i in (6, 7):
-            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        else:
-            p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        if i in [5, 7, 10, len(lines) - 2]:
-            doc.add_paragraph("")
-
-    doc.save(folder_path / "Lettre de motivation César Fuentes.docx")
-
-
-def create_overrides_json(folder_path, results):
-    overrides_data = {}
-
-    for key, value in results.items():
-        if key == "letter":
-            continue
-
-        try:
-            parsed = json.loads(value)
-            if isinstance(parsed, dict) and key in parsed:
-                overrides_data[key] = parsed[key]
-            else:
-                overrides_data[key] = parsed
-        except json.JSONDecodeError:
-            print(f"Warning: {key} is not valid JSON, storing as string")
-            overrides_data[key] = value
-
-    output_path = folder_path / "overrides.json"
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(overrides_data, f, ensure_ascii=False, indent=2)
-
-    print(f"Overrides JSON created: {output_path}")
-
-
-def generate_resume_pdf(folder_path, company, date):
+def add_to_sheet(company, platform, job_title, url, date):
     try:
-        Config.RESUME_OVERRIDES_DIR.mkdir(parents=True, exist_ok=True)
+        wb = openpyxl.load_workbook(Config.EXCEL_FILE)
+        ws = wb["suivi"]
 
-        overrides_json_path = folder_path / "overrides.json"
+        new_row_data = ["A faire", "CDI", company, platform, job_title, url, date, ""]
+        ws.append(new_row_data)
+        new_row_idx = ws.max_row
 
-        if overrides_json_path.exists():
-            with open(overrides_json_path, "r", encoding="utf-8") as f:
-                overrides_data = json.load(f)
+        for col in range(1, len(new_row_data) + 1):
+            ws.cell(row=new_row_idx, column=col).font = Font(name="Roboto", size=10)
 
-            for key, value in overrides_data.items():
-                override_path = Config.RESUME_OVERRIDES_DIR / f"{key}.json"
-                with open(override_path, "w", encoding="utf-8") as f:
-                    json.dump(value, f, ensure_ascii=False, indent=2)
-                print(f"Created override: {key}.json")
+        for cell in ws[1]:
+            cell.font = Font(name="Roboto", size=11)
+
+        data = list(ws.iter_rows(min_row=2, values_only=True))
+        data_sorted = sorted(data, key=lambda x: x[0] or "")
+
+        for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+            for cell in row:
+                cell.value = None
+
+        for r_idx, row_data in enumerate(data_sorted, start=2):
+            for c_idx, value in enumerate(row_data, start=1):
+                cell = ws.cell(row=r_idx, column=c_idx, value=value)
+                cell.font = Font(name="Roboto", size=11)
+
+        wb.save(Config.EXCEL_FILE)
+        wb.close()
+
+    except Exception as e:
+        print(f"Error adding to Excel: {e}")
+        raise
+
+
+def make_letter(openai, folder_path):
+    folder_path = Path(folder_path)
+
+    try:
+        letter_path = Config.PROMPTS_DIR / "letter.txt"
+        with open(letter_path, "r", encoding="utf-8") as f:
+            letter_prompt = f.read().strip()
+
+        content = openai.query(letter_prompt, True, True)
+
+        doc = Document()
 
         try:
-            output_pdf = folder_path / f"CV César Fuentes.pdf"
+            style = doc.styles["Normal"]
+            font = style.font
+            font.name = "Times New Roman"
+            font.size = Pt(11)
+            style.paragraph_format.space_after = Pt(0)
+            style.paragraph_format.space_before = Pt(0)
+            style.paragraph_format.line_spacing = 1.0
+        except Exception as e:
+            print("[ERROR] Style config failed:", e)
+            traceback.print_exc()
 
-            result = subprocess.run(
-                [
-                    "node",
-                    str(Config.RESUME_SCRIPT),
-                    str(output_pdf),
-                ],
-                capture_output=True,
-                text=True,
-                check=True,
-            )
+        lines = [line.rstrip() for line in content.split("\n")]
 
-            print(result.stdout)
-            print(f"Resume PDF generated: {output_pdf}")
-            return str(output_pdf)
+        for i, line in enumerate(lines, start=1):
+            p = doc.add_paragraph(line)
+            p.paragraph_format.space_after = Pt(0)
+            p.paragraph_format.space_before = Pt(0)
 
-        finally:
-            if Config.RESUME_OVERRIDES_DIR.exists():
-                shutil.rmtree(Config.RESUME_OVERRIDES_DIR)
-                print(f"Cleaned up resume_overrides folder")
+            if i in (6, 7):
+                p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            else:
+                p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            if i in [5, 7, 10, len(lines) - 2]:
+                doc.add_paragraph("")
 
-    except subprocess.CalledProcessError as e:
-        print(f"Error generating PDF: {e.stderr}")
-        raise
+        output_path = folder_path / "Lettre de motivation César Fuentes.docx"
+        doc.save(str(output_path))
+
     except Exception as e:
-        print(f"Error: {e}")
-        raise
+        traceback.print_exc()

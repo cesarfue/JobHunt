@@ -1,9 +1,11 @@
 from datetime import datetime
 
+from config import Config
 from flask import Blueprint, jsonify, request
-from services.excel_service import add_to_excel
-from services.job_service import generate_job_documents
-from services.openai_service import extract_job_info
+from services.document_service import add_to_sheet, make_letter
+from services.filesystem_service import create_folder, open_folder_in_explorer
+from services.openai_service import OpenAIService
+from services.resume_service import make_resume
 
 bp = Blueprint("job", __name__, url_prefix="/api")
 
@@ -15,15 +17,20 @@ def handle_job():
 
     try:
         data = request.json
-        extracted = extract_job_info(data["content"])
+        openai = OpenAIService(data["content"])
+        extracted = openai.job_content
         company = extracted.get("company", "Inconnue").title()
         job_title = extracted.get("job_title", data.get("title", "Poste")).title()
-        job_content = extracted.get("job_description", data.get("content", ""))
         platform = extracted.get("platform", "Hors Plateforme").title()
 
         today = datetime.now().strftime("%Y-%m-%d")
-        add_to_excel(company, platform, job_title, data["url"], today)
-        folder_path = generate_job_documents(company, job_title, job_content)
+        folder_path = create_folder(company, today)
+
+        make_resume(openai, folder_path)
+        if not Config.DEBUG_MODE:
+            add_to_sheet(company, platform, job_title, data["url"], today)
+            make_letter(openai, folder_path)
+            open_folder_in_explorer(folder_path)
 
         return jsonify(
             {

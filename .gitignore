@@ -4,12 +4,8 @@ src/backend/.DS_Store
 src/backend/services/__pycache__
 src/backend/__pycache__
 src/backend/routes/__pycache__
-backend/.env
-backend/.venv
-backend/.DS_Store
-backend/services/__pycache__
-backend/__pycache__
-backend/routes/__pycache__
+src/backend/log
+
 .DS_Store
 
 Recherche Janvier 2026.xlsx
@@ -17,9 +13,8 @@ Recherche Janvier 2026.xlsx
 Candidatures/
 Applications/
 
-resume/resume.pdf
-resume/public/resume_overrides
 src/resume/resume.pdf
+src/resume/test.pdf
 src/resume/public/resume_overrides
 src/resume/node_modules
 src/resume/*.pdf
