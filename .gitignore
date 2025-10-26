@@ -19,3 +19,10 @@ src/resume/public/resume_overrides
 src/resume/node_modules
 src/resume/*.pdf
 ~$Recherche Janvier 2026.xlsx
+src/.venv
+src/app/__pycache__
+src/scraper/__pycache__
+src/jobs.db
+src/db/__pycache__
+src/resume/public/overrides.json
+src/resume/public/overrides.json
