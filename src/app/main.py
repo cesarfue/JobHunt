@@ -99,14 +99,13 @@ def main():
 
     while True:
         try:
-            cmd = session.prompt("> ").strip().lower()
+            cmd = session.prompt("> ").strip()
         except KeyboardInterrupt:
             continue
         except EOFError:
             break
 
         if cmd == "exit":
-            print("Goodbye!")
             break
 
         elif cmd == "start":
@@ -124,12 +123,10 @@ def main():
         elif cmd == "fetch":
             run_scraper()
 
-        elif cmd == "add":
-            url = input("Enter the job URL to add: ").strip()
-            if url:
-                add_job_entry(url)
-            else:
-                print("No URL entered. Skipping.")
+        elif cmd.startswith("add"):
+            parts = cmd.split()
+            if len(parts) == 2:
+                add_job_entry(parts[1])
 
         elif cmd.startswith("open"):
             parts = cmd.split()

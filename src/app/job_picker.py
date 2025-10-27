@@ -136,7 +136,7 @@ class JobPicker:
         return False
 
     def run(self):
-        self.jobs = list(get_pending_jobs())
+        self.jobs = list(get_pending_jobs("DESC"))
 
         if not self.jobs:
             self.display_jobs()
@@ -154,7 +154,6 @@ class JobPicker:
             key = self.get_key()
 
             if key == "q":
-                print("\n  Goodbye!")
                 break
             elif key == "up":
                 if self.current_index > 0:
@@ -177,8 +176,8 @@ def list_subs():
 
     table = []
     for job in jobs:
-        job_id, title, company, site, location, scraped_at = job
-        table.append([job_id, title, company, site, location, scraped_at])
+        job_id, title, company, site, location, date_added = job
+        table.append([job_id, title, company, site, location, date_added])
 
     print("\n" + "=" * 100)
     print("  SUBS ")
@@ -198,7 +197,6 @@ def interactive_job_picker():
         picker = JobPicker()
         picker.run()
     except KeyboardInterrupt:
-        print("\n\n  Interrupted. Goodbye!")
         sys.exit(0)
 
 
