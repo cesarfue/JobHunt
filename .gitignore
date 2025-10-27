@@ -25,3 +25,4 @@ src/scraper/__pycache__
 src/jobs.db
 src/db/__pycache__
 src/resume/public/overrides.json
+src/db/jobs.db
