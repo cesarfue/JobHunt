@@ -2,7 +2,6 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from config import Config
 from flask import Blueprint, jsonify, request
 from services.document_service import make_letter
 from services.filesystem_service import create_folder, open_folder_in_explorer
@@ -34,7 +33,6 @@ def handle_job():
                 jsonify({"status": "error", "message": "Missing 'url' in request."}),
                 400,
             )
-
         response = requests.get(url, timeout=10)
         if not response.ok:
             return (
@@ -43,7 +41,6 @@ def handle_job():
             )
 
         content = extract_visible_text(response.text)
-
         openai = OpenAIService(content)
         extracted = openai.job_content
 

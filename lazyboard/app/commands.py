@@ -2,8 +2,6 @@ import sqlite3
 import webbrowser
 
 import requests
-from tabulate import tabulate
-
 from app.ui_utils import (
     Colors,
     calculate_column_widths,
@@ -14,20 +12,26 @@ from app.ui_utils import (
     print_header,
     truncate_text,
 )
-from db.db import DB_PATH, get_all_jobs, mark_job_as_discarded
+from db.db import DB_PATH, get_all_jobs, mark_job_as_discarded, mark_job_as_wip
+from tabulate import tabulate
 
 API_URL = "http://127.0.0.1:5000/api/job"
 
 
 def apply_to_job(job):
     job_id, title, company, site, location, url, status = job
-    print(f"\n  Applying to {company} - {title}...")
+    print(f"\nApplying to {company} - {title}...")
+
     try:
-        requests.post(API_URL, json={"url": url}, timeout=60)
+        response = requests.post(API_URL, json={"url": url}, timeout=60)
+        if response.status_code != 200:
+            return False
+
         mark_job_as_wip(job_id)
         return True
-    except Exception as e:
-        print(f"Error while sending url {url}: {e}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error while sending {url}: {e}")
         return False
 
 

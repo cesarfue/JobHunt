@@ -27,3 +27,19 @@ src/db/__pycache__
 src/resume/public/overrides.json
 src/db/jobs.db
 src/Recherche Janvier 2026.csv
+backend/__pycache__
+backend/__pycache__
+backend/routes/__pycache__
+backend/services/__pycache__
+lazyboard/app/__pycache__
+lazyboard/db/__pycache__
+lazyboard/launchd
+lazyboard/scraper/__pycache__
+lazyboard/.venv
+resume/public/overrides.json
+resume/public/overrides.json
+backend/.env
+backend/Lettre de motivation César Fuentes.docx
+lazyboard/db/jobs.db
+resume/.vite/deps
+resume/node_modules

@@ -1,5 +1,3 @@
-import signal
-
 from prompt_toolkit import PromptSession
 
 from app.commands import open_job_url, show_all_jobs, show_stats
@@ -27,17 +25,10 @@ def display_welcome():
     print()
 
 
-def handle_resize(signum, frame):
-    print(f"\n[DEBUG] SIGWINCH triggered! New terminal size: {os.get_terminal_size()}")
-    # print("\033c", end="")  # clear screen
-    show_all_jobs()
-
-
 def main():
     session = PromptSession()
     display_welcome()
 
-    signal.signal(signal.SIGWINCH, handle_resize)
     while True:
         try:
             cmd = session.prompt("> ").strip()

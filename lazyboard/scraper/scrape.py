@@ -1,6 +1,5 @@
-from jobspy import scrape_jobs
-
 from db.db import init_db, insert_jobs
+from jobspy import scrape_jobs
 from scraper.score import retrieve_job_score
 
 

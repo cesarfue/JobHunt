@@ -22,7 +22,7 @@ DEFAULT_PENALTIES = [
 def load_resume(resume_path: Optional[Path] = None) -> dict:
     if resume_path is None:
         resume_path = (
-            Path(__file__).resolve().parent.parent / "resume/public/resume.json"
+            Path(__file__).resolve().parent.parent.parent / "resume/public/resume.json"
         )
     try:
         with open(resume_path, "r", encoding="utf-8") as f:

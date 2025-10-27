@@ -1,0 +1,12 @@
+flask
+flask-cors
+openai
+openpyxl
+python-docx
+python-dotenv
+requests
+beautifulsoup4
+jobspy
+prompt_toolkit
+tabulate
+pandas

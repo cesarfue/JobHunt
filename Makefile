@@ -1,4 +1,4 @@
-.PHONY: up dev backend
+.PHONY: up resume backend lazyboard
 
 up:
 	@echo "Starting services..."
@@ -6,22 +6,18 @@ up:
 
 resume:
 	@echo "Starting Vite dev server..."
-	@cd src/resume && npm run dev
+	@cd resume && npm run dev
 
 backend:
 	@echo "Starting Flask backend..."
-	@cd src && source ./.venv/bin/activate && cd backend && python app.py
+	@cd backend && source ./.venv/bin/activate && python app.py
 
-scraper:
-	@echo "Starting scraper..."
-	@cd src && source ./.venv/bin/activate && PYTHONPATH=. python -m scraper.scrape
-
-app:
-	@echo "Starting app..."
-	@cd src && source ./.venv/bin/activate && PYTHONPATH=. python -m app.main
+board:
+	@echo "Starting lazyboard..."
+	@cd lazyboard && source ./.venv/bin/activate && PYTHONPATH=. python -m app.main
 
 db:
-	sqlite3 src/db/jobs.db
+	sqlite3 lazyboard/db/jobs.db
 
 rmdb:
-	@rm src/db/jobs.db
+	@rm lazyboard/db/jobs.db

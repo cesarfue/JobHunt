@@ -21,7 +21,7 @@ class OpenAIService:
 
     def load_resume_data(self):
         try:
-            with open(Config.RESUME_JSON, "r", encoding="utf-8") as f:
+            with open(Config.RESUME_JSON.resolve(), "r", encoding="utf-8") as f:
                 self.resume_json = json.dumps(
                     json.load(f), ensure_ascii=False, indent=2
                 )
@@ -33,10 +33,12 @@ class OpenAIService:
         full_prompt = prompt
         if include_job_content:
             full_prompt = f"{prompt}\n\n## Job content\n{self.job_content}"
-
-        response = client.chat.completions.create(
-            model="gpt-4.1", messages=[{"role": "user", "content": full_prompt}]
-        )
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4.1", messages=[{"role": "user", "content": full_prompt}]
+            )
+        except Exception as e:
+            print(f"Error querying openai: {e}")
         return response.choices[0].message.content.strip()
 
     def extract_job_info(self, content):
