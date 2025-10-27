@@ -36,6 +36,9 @@ class OpenAIService:
         if include_resume:
             full_prompt = f"{prompt}\n\n# Mon CV (JSON)\n\n{self.resume_json}"
 
+        if include_job_content and include_resume:
+            print(f"Query : \n{full_prompt}")
+
         response = client.chat.completions.create(
             model="gpt-4.1", messages=[{"role": "user", "content": full_prompt}]
         )

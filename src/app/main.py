@@ -4,7 +4,7 @@ import webbrowser
 from prompt_toolkit import PromptSession
 from tabulate import tabulate
 
-from app.job_picker import interactive_job_picker, list_subs
+from app.job_picker import interactive_job_picker
 from app.web_parser import add_job_entry
 from db.db import DB_PATH, get_all_jobs
 from scraper.scrape import run_scraper
@@ -32,13 +32,15 @@ def show_all_jobs():
 
     table = []
     for job in jobs:
-        job_id, title, company, site, location, url, status = job
-        if status == "applied":
-            status_display = f"\033[92m{status.upper()}\033[0m"  # Green
-        elif status == "discarded":
-            status_display = f"\033[91m{status.upper()}\033[0m"  # Red
+        job_id, title, company, site, location, date_added, status = job
+        if status == "pending":
+            status_display = f"\033[93m{status.upper()}\033[0m"
+        elif status == "wip":
+            status_display = f"\033[94m{status.upper()}\033[0m"
+        elif status == "applied":
+            status_display = f"\033[92m{status.upper()}\033[0m"
         else:
-            status_display = f"\033[93m{status.upper()}\033[0m"  # Yellow
+            status_display = f"\033[91m{status.upper()}\033[0m"
 
         table.append(
             [
@@ -47,7 +49,7 @@ def show_all_jobs():
                 company[:20],
                 site,
                 location[:20],
-                url[:20],
+                date_added,
                 status_display,
             ]
         )
@@ -58,7 +60,15 @@ def show_all_jobs():
     print(
         tabulate(
             table,
-            headers=["ID", "Title", "Company", "Site", "Location", "URL", "Status"],
+            headers=[
+                "ID",
+                "Title",
+                "Company",
+                "Site",
+                "Location",
+                "Date added",
+                "Status",
+            ],
             tablefmt="fancy_grid",
         )
     )
@@ -67,14 +77,16 @@ def show_all_jobs():
 
 def show_stats():
     all_jobs = get_all_jobs()
+    pending = sum(1 for job in all_jobs if job[6].lower() == "pending")
+    wip = sum(1 for job in all_jobs if job[6].lower() == "wip")
     applied = sum(1 for job in all_jobs if job[6].lower() == "applied")
     discarded = sum(1 for job in all_jobs if job[6].lower() == "discarded")
-    pending = sum(1 for job in all_jobs if job[6].lower() == "pending")
 
     print("\n" + "=" * 50)
     print("  JOB STATISTICS")
     print("=" * 50)
     print(f"  \033[93mPending:\033[0m    {pending}")
+    print(f"  \033[94mWIP:\033[0m        {wip}")
     print(f"  \033[92mApplied:\033[0m    {applied}")
     print(f"  \033[91mDiscarded:\033[0m  {discarded}")
     print(f"  Total:      {len(all_jobs)}")
@@ -89,7 +101,6 @@ def main():
     print("=" * 60)
     print("\n  Available commands:")
     print("    start          - Start reviewing pending jobs")
-    print("    subs           - List all applied jobs")
     print("    list           - Show all jobs with status")
     print("    stats          - Show job statistics")
     print("    fetch          - Fetch new jobs")
@@ -110,9 +121,6 @@ def main():
 
         elif cmd == "start":
             interactive_job_picker()
-
-        elif cmd == "subs":
-            list_subs()
 
         elif cmd == "list":
             show_all_jobs()
@@ -141,7 +149,7 @@ def main():
 
         else:
             print(
-                "Unknown command. Type 'start', 'subs', 'list', 'stats', 'add', 'open' or 'exit'."
+                "Unknown command. Type 'start', 'list', 'stats', 'add', 'open' or 'exit'."
             )
 
 

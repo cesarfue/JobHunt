@@ -1,15 +1,15 @@
 import sys
 import termios
 import tty
-from typing import List, Tuple
 
 import requests
 
 from db.db import (
-    get_applied_jobs,
     get_pending_jobs,
     mark_job_as_applied,
     mark_job_as_discarded,
+    mark_job_as_pending,
+    mark_job_as_wip,
 )
 
 API_URL = "http://127.0.0.1:5000/api/job"
@@ -42,6 +42,11 @@ class JobPicker:
     def clear_screen(self):
         print("\033[2J\033[H", end="")
 
+    def update_status(self, status):
+        current_job = list(self.jobs[self.current_index])
+        current_job[6] = status
+        self.jobs[self.current_index] = current_job
+
     def display_jobs(self):
         self.clear_screen()
 
@@ -69,33 +74,42 @@ class JobPicker:
 
         for i, job in enumerate(visible_jobs):
             actual_index = start_idx + i
-            job_id, title, company, site, location, url = job
+            job_id, title, company, site, location, url, status = job  # include id
+
+            if status == "pending":
+                color_code = "\033[1;33m"  # yellow
+            else:
+                color_code = "\033[1;35m"  # purple
 
             if actual_index == self.current_index:
                 print(
-                    f"  → \033[1;36m[{actual_index + 1}/{len(self.jobs)}] {title}\033[0m"
+                    f"  → {color_code}[{actual_index + 1}/{len(self.jobs)}] {title}\033[0m"
                 )
-                print(f"    \033[1;36m{company} | {site} | {location}\033[0m")
+                print(f"    {color_code}{company} | {site} | {location}\033[0m")
                 print(f"    \033[90m{url}\033[0m")
             else:
                 print(f"    [{actual_index + 1}/{len(self.jobs)}] {title}")
                 print(f"    {company} | {site} | {location}")
-                print(f"    \033[90m{url}...\033[0m")
+                print(f"    \033[90m{url}\033[0m")
             print()
 
+        _, _, _, _, _, _, status = self.jobs[self.current_index]
         print("=" * 80)
-        print("  Commands: [a] Apply  [d] Discard  [l] Later  [q] Quit")
+        footer = f"  {'WIP' if status == 'wip' else 'Pending'} job: [a] "
+        footer += "Set to WIP" if status == "pending" else "Set to applied"
+        if status == "wip":
+            footer += "\t[p] Set to pending"
+        footer += "\t[d] Discard \t[q] Quit"
+
+        print(footer)
         print("=" * 80)
 
     def apply_to_job(self, job):
-        job_id, title, company, site, location, url = job
+        job_id, title, company, site, location, url, status = job
         print(f"\n  Applying to {company} - {title}...")
         try:
-            response = requests.post(API_URL, json={"url": url}, timeout=10)
-            data = response.json()
-            status = data.get("status", "unknown")
-            print(f"Status: {status}")
-            mark_job_as_applied(job_id)
+            requests.post(API_URL, json={"url": url}, timeout=60)
+            mark_job_as_wip(job_id)
             return True
         except Exception as e:
             print(f"Error while sending url {url}: {e}")
@@ -111,26 +125,31 @@ class JobPicker:
             return False
 
         current_job = self.jobs[self.current_index]
+        _, _, _, _, _, _, status = self.jobs[self.current_index]
 
-        if action == "a":
-            self.apply_to_job(current_job)
-            self.jobs.pop(self.current_index)
-            if self.current_index >= len(self.jobs) and self.current_index > 0:
-                self.current_index -= 1
-            input("\n  Press Enter to continue...")
-            return True
+        if status == "pending":
+            if action == "a":
+                self.apply_to_job(current_job)
+                self.update_status("wip")
+                return True
+
+        elif status == "wip":
+            if action == "a":
+                mark_job_as_applied(current_job[0])
+                self.update_status("applied")
+                self.jobs.pop(self.current_index)
+                if self.current_index >= len(self.jobs) and self.current_index > 0:
+                    self.current_index -= 1
+                return True
+            elif action == "p":
+                mark_job_as_pending(current_job[0])
+                self.update_status("pending")
 
         elif action == "d":
             self.discard_job(current_job)
             self.jobs.pop(self.current_index)
             if self.current_index >= len(self.jobs) and self.current_index > 0:
                 self.current_index -= 1
-            input("\n  Press Enter to continue...")
-            return True
-
-        elif action == "l":
-            if self.current_index < len(self.jobs) - 1:
-                self.current_index += 1
             return True
 
         return False
@@ -155,41 +174,14 @@ class JobPicker:
 
             if key == "q":
                 break
-            elif key == "up":
+            elif key == "up" or key == "j":
                 if self.current_index > 0:
                     self.current_index -= 1
-            elif key == "down":
+            elif key == "down" or key == "k":
                 if self.current_index < len(self.jobs) - 1:
                     self.current_index += 1
-            elif key in ["a", "d", "l"]:
+            elif key in ["a", "d", "p"]:
                 self.handle_action(key)
-
-
-def list_subs():
-    from tabulate import tabulate
-
-    jobs = get_applied_jobs()
-
-    if not jobs:
-        print("\n  No applications yet!")
-        return
-
-    table = []
-    for job in jobs:
-        job_id, title, company, site, location, date_added = job
-        table.append([job_id, title, company, site, location, date_added])
-
-    print("\n" + "=" * 100)
-    print("  SUBS ")
-    print("=" * 100 + "\n")
-    print(
-        tabulate(
-            table,
-            headers=["ID", "Title", "Company", "Site", "Location", "Applied At"],
-            tablefmt="fancy_grid",
-        )
-    )
-    print()
 
 
 def interactive_job_picker():
@@ -201,7 +193,4 @@ def interactive_job_picker():
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "list":
-        list_subs()
-    else:
-        interactive_job_picker()
+    interactive_job_picker()

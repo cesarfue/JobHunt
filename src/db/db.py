@@ -62,6 +62,14 @@ def mark_job_as_applied(job_id):
     conn.close()
 
 
+def mark_job_as_wip(job_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("UPDATE jobs SET status='wip' WHERE id=?", (job_id,))
+    conn.commit()
+    conn.close()
+
+
 def mark_job_as_discarded(job_id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -70,10 +78,18 @@ def mark_job_as_discarded(job_id):
     conn.close()
 
 
+def mark_job_as_pending(job_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("UPDATE jobs SET status='pending' WHERE id=?", (job_id,))
+    conn.commit()
+    conn.close()
+
+
 def get_pending_jobs(order):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    query = f"SELECT id, title, company, site, location, url FROM jobs WHERE status='pending' ORDER BY score {order}, date_added {order}"
+    query = f"SELECT id, title, company, site, location, url, status FROM jobs WHERE status='pending' OR status='wip' ORDER BY status {order}, score {order}, date_added {order}"
     c.execute(query)
     jobs = c.fetchall()
     conn.close()
@@ -84,7 +100,7 @@ def get_applied_jobs():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(
-        "SELECT id, title, company, site, location, url FROM jobs WHERE status='applied' ORDER BY score ASC, date_added ASC"
+        "SELECT id, title, company, site, location, date_added FROM jobs WHERE status='applied' ORDER BY score ASC, date_added ASC"
     )
     jobs = c.fetchall()
     conn.close()
@@ -96,10 +112,17 @@ def get_all_jobs():
     c = conn.cursor()
     c.execute(
         """
-        SELECT id, title, company, site, location, url, status
+        SELECT id, title, company, site, location, date_added, status
         FROM jobs
         WHERE status != 'discarded'
-        ORDER BY status ASC, score ASC, date_added ASC
+        ORDER BY
+          CASE status
+            WHEN 'pending' THEN 4
+            WHEN 'wip' THEN 3
+            WHEN 'applied' THEN 2
+            ELSE 1
+          END,
+          score ASC, date_added ASC
         """
     )
     jobs = c.fetchall()
