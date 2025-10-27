@@ -46,7 +46,7 @@ class JobPicker:
         self.clear_screen()
 
         print("=" * 80)
-        print("  JOB HUNTER - Navigate with ↑/↓ arrows")
+        print("  Navigate with ↑/↓ arrows")
         print("=" * 80)
         print()
 

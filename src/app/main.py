@@ -1,11 +1,27 @@
-import sys
+import sqlite3
+import webbrowser
 
 from prompt_toolkit import PromptSession
 from tabulate import tabulate
 
 from app.job_picker import interactive_job_picker, list_subs
-from db.db import get_all_jobs
+from app.web_parser import add_job_entry
+from db.db import DB_PATH, get_all_jobs
 from scraper.scrape import run_scraper
+
+
+def open_job_url(job_id: int):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT url FROM jobs WHERE id = ?", (job_id,))
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        url = row[0]
+        webbrowser.open(url)
+    else:
+        print(f"No job found with id {job_id}")
 
 
 def show_all_jobs():
@@ -77,6 +93,7 @@ def main():
     print("    list           - Show all jobs with status")
     print("    stats          - Show job statistics")
     print("    fetch          - Fetch new jobs")
+    print("    open           - Open job page in browser")
     print("    exit           - Quit the application")
     print()
 
@@ -107,9 +124,27 @@ def main():
         elif cmd == "fetch":
             run_scraper()
 
+        elif cmd == "add":
+            url = input("Enter the job URL to add: ").strip()
+            if url:
+                add_job_entry(url)
+            else:
+                print("No URL entered. Skipping.")
+
+        elif cmd.startswith("open"):
+            parts = cmd.split()
+            if len(parts) == 2:
+                try:
+                    job_id = int(parts[1])
+                    open_job_url(job_id)
+                except ValueError:
+                    print("Invalid job ID. Must be a number.")
+            else:
+                print("Usage: open <job_id>")
+
         else:
             print(
-                "Unknown command. Type 'start', 'applications', 'list', 'stats', or 'exit'."
+                "Unknown command. Type 'start', 'subs', 'list', 'stats', 'add', 'open' or 'exit'."
             )
 
 

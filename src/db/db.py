@@ -31,6 +31,7 @@ def insert_jobs(jobs):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     for job in jobs:
+        url = jobs.get("job_url").rstrip("/")
         try:
             c.execute(
                 """
@@ -42,7 +43,7 @@ def insert_jobs(jobs):
                     job.get("company"),
                     job.get("location"),
                     job.get("site"),
-                    job.get("job_url"),
+                    url,
                     job.get("job_type"),
                     job.get("score"),
                 ),
@@ -98,6 +99,7 @@ def get_all_jobs():
         """
         SELECT id, title, company, site, location, url, status
         FROM jobs
+        WHERE status != 'discarded'
         ORDER BY status DESC, score DESC, scraped_at DESC
         """
     )
