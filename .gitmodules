@@ -1,0 +1,3 @@
+[submodule "src/jobspy"]
+	path = src/jobspy
+	url = https://github.com/cesarfue/JobSpy.git
