@@ -1,27 +1,43 @@
+import signal
+
 from prompt_toolkit import PromptSession
-from tabulate import tabulate
 
 from app.commands import open_job_url, show_all_jobs, show_stats
 from app.job_picker import interactive_job_picker
+from app.ui_utils import get_separator, get_terminal_size
 from app.web_parser import add_job_entry
 from scraper.scrape import run_scraper
 
 
-def main():
-    session = PromptSession()
+def display_welcome():
+    width, _ = get_terminal_size()
+    separator = get_separator(min(width, 60))
 
-    print("\n" + "=" * 60)
+    print("\n" + separator)
     print("  OverengineeredJobSearch Interactive Shell!")
-    print("=" * 60)
+    print(separator)
     print("\n  Available commands:")
     print("    start          - Start reviewing pending jobs")
     print("    list           - Show all jobs with status")
     print("    stats          - Show job statistics")
     print("    fetch          - Fetch new jobs")
-    print("    open           - Open job page in browser")
+    print("    open <id>      - Open job page in browser")
+    print("    add <url>      - Add a job from URL")
     print("    exit           - Quit the application")
     print()
 
+
+def handle_resize(signum, frame):
+    print(f"\n[DEBUG] SIGWINCH triggered! New terminal size: {os.get_terminal_size()}")
+    # print("\033c", end="")  # clear screen
+    show_all_jobs()
+
+
+def main():
+    session = PromptSession()
+    display_welcome()
+
+    signal.signal(signal.SIGWINCH, handle_resize)
     while True:
         try:
             cmd = session.prompt("> ").strip()
@@ -29,6 +45,9 @@ def main():
             continue
         except EOFError:
             break
+
+        if not cmd:
+            continue
 
         if cmd == "exit":
             break
@@ -46,12 +65,14 @@ def main():
             run_scraper()
 
         elif cmd.startswith("add"):
-            parts = cmd.split()
+            parts = cmd.split(maxsplit=1)
             if len(parts) == 2:
                 add_job_entry(parts[1])
+            else:
+                print("Usage: add <url>")
 
         elif cmd.startswith("open"):
-            parts = cmd.split()
+            parts = cmd.split(maxsplit=1)
             if len(parts) == 2:
                 try:
                     job_id = int(parts[1])
@@ -62,9 +83,7 @@ def main():
                 print("Usage: open <job_id>")
 
         else:
-            print(
-                "Unknown command. Type 'start', 'list', 'stats', 'add', 'open' or 'exit'."
-            )
+            print("Unknown command. Type 'exit' for available commands or see above.")
 
 
 if __name__ == "__main__":

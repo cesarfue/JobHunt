@@ -4,6 +4,16 @@ import webbrowser
 import requests
 from tabulate import tabulate
 
+from app.ui_utils import (
+    Colors,
+    calculate_column_widths,
+    colorize,
+    get_status_display,
+    get_terminal_size,
+    print_footer,
+    print_header,
+    truncate_text,
+)
 from db.db import DB_PATH, get_all_jobs, mark_job_as_discarded
 
 API_URL = "http://127.0.0.1:5000/api/job"
@@ -47,64 +57,91 @@ def show_all_jobs():
         print("\nNo jobs in database!")
         return
 
+    width, _ = get_terminal_size()
+
+    all_columns = [
+        ("id", "ID", 5, 0),
+        ("title", "Title", 40, 0),
+        ("company", "Company", 20, 60),
+        ("site", "Site", 5, 60),
+        ("location", "Location", 15, 100),
+        ("date", "Date added", 12, 120),
+        ("status", "Status", 12, 0),
+    ]
+
+    visible_columns = []
+    headers = []
+
+    for col_name, display_name, col_width, min_width in all_columns:
+        if width >= min_width:
+            visible_columns.append((col_name, col_width))
+            headers.append(display_name)
+
+    flexible_config = []
+    for col_name, col_width in visible_columns:
+        if col_name == "title":
+            flexible_config.append((col_name, 0.5, 20))
+        elif col_name == "company":
+            flexible_config.append((col_name, 0.3, 10))
+        elif col_name == "location":
+            flexible_config.append((col_name, 0.2, 10))
+        elif col_name == "site":
+            flexible_config.append((col_name, 0.2, 10))
+        else:
+            flexible_config.append((col_name, col_width, col_width))
+
+    widths = calculate_column_widths(width, flexible_config)
+
     table = []
     for job in jobs:
         job_id, title, company, site, location, date_added, status = job
-        if status == "pending":
-            status_display = f"\033[93m{status.upper()}\033[0m"
-        elif status == "wip":
-            status_display = f"\033[94m{status.upper()}\033[0m"
-        elif status == "applied":
-            status_display = f"\033[92m{status.upper()}\033[0m"
-        else:
-            status_display = f"\033[91m{status.upper()}\033[0m"
 
-        table.append(
-            [
-                job_id,
-                title[:40],
-                company[:20],
-                site,
-                location[:20],
-                date_added,
-                status_display,
-            ]
-        )
+        row = []
+        for col_name, _ in visible_columns:
+            if col_name == "id":
+                row.append(job_id)
+            elif col_name == "title":
+                row.append(truncate_text(title, widths["title"]))
+            elif col_name == "company":
+                row.append(truncate_text(company, widths["company"]))
+            elif col_name == "site":
+                row.append(truncate_text(site, widths["site"]))
+            elif col_name == "location":
+                row.append(truncate_text(location, widths["location"]))
+            elif col_name == "date":
+                row.append(date_added)
+            elif col_name == "status":
+                row.append(get_status_display(status))
 
-    print("\n" + "=" * 120)
-    print("  ALL JOBS")
-    print("=" * 120 + "\n")
+        table.append(row)
+
+    print_header("ALL JOBS", width)
     print(
         tabulate(
             table,
-            headers=[
-                "ID",
-                "Title",
-                "Company",
-                "Site",
-                "Location",
-                "Date added",
-                "Status",
-            ],
+            headers=headers,
             tablefmt="fancy_grid",
         )
     )
-    print(f"\n  Total: {len(jobs)} jobs\n")
+    print(f"\n  Total: {len(jobs)} jobs")
+    print_footer(width)
 
 
 def show_stats():
+    width, _ = get_terminal_size()
     all_jobs = get_all_jobs()
+
     pending = sum(1 for job in all_jobs if job[6].lower() == "pending")
     wip = sum(1 for job in all_jobs if job[6].lower() == "wip")
     applied = sum(1 for job in all_jobs if job[6].lower() == "applied")
     discarded = sum(1 for job in all_jobs if job[6].lower() == "discarded")
 
-    print("\n" + "=" * 50)
-    print("  JOB STATISTICS")
-    print("=" * 50)
-    print(f"  \033[93mPending:\033[0m    {pending}")
-    print(f"  \033[94mWIP:\033[0m        {wip}")
-    print(f"  \033[92mApplied:\033[0m    {applied}")
-    print(f"  \033[91mDiscarded:\033[0m  {discarded}")
+    box_width = min(50, width - 4)
+
+    print_header("JOB STATISTICS", box_width)
+    print(f"  {colorize('Pending:', Colors.YELLOW)}    {pending}")
+    print(f"  {colorize('WIP:', Colors.BLUE)}        {wip}")
+    print(f"  {colorize('Applied:', Colors.GREEN)}    {applied}")
+    print(f"  {colorize('Discarded:', Colors.RED)}  {discarded}")
     print(f"  Total:      {len(all_jobs)}")
-    print("=" * 50 + "\n")
+    print_footer(box_width)

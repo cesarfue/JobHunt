@@ -3,6 +3,14 @@ import termios
 import tty
 
 from app.commands import apply_to_job, discard_job, open_job_url
+from app.ui_utils import (
+    Colors,
+    clear_screen,
+    colorize,
+    get_separator,
+    get_terminal_size,
+    truncate_text,
+)
 from db.db import get_pending_jobs, mark_job_as_applied, mark_job_as_pending
 
 
@@ -10,7 +18,48 @@ class JobPicker:
     def __init__(self):
         self.jobs = []
         self.current_index = 0
-        self.max_display = 5
+        self._last_terminal_size = None
+
+    def _check_terminal_resize(self):
+        current_size = self.get_terminal_size()
+        if self._last_terminal_size is None:
+            self._last_terminal_size = current_size
+            return False
+        if current_size != self._last_terminal_size:
+            self._last_terminal_size = current_size
+            return True
+        return False
+
+    @staticmethod
+    def get_terminal_size():
+        return get_terminal_size()
+
+    def run(self):
+        self.jobs = list(get_pending_jobs("DESC"))
+
+        if not self.jobs:
+            self.display_jobs()
+            self.get_key()
+            return
+
+        while True:
+            self.display_jobs()
+            if not self.jobs:
+                print("\n  All jobs processed!")
+                break
+
+            key = self.get_key()
+
+            if key == "q":
+                break
+            elif key in ("up", "k"):
+                if self.current_index > 0:
+                    self.current_index -= 1
+            elif key in ("down", "j"):
+                if self.current_index < len(self.jobs) - 1:
+                    self.current_index += 1
+            elif key in ["a", "d", "p", "o"]:
+                self.handle_action(key)
 
     def get_key(self):
         fd = sys.stdin.fileno()
@@ -30,20 +79,26 @@ class JobPicker:
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-    def clear_screen(self):
-        print("\033[2J\033[H", end="")
-
     def update_status(self, status):
         current_job = list(self.jobs[self.current_index])
         current_job[6] = status
         self.jobs[self.current_index] = current_job
 
     def display_jobs(self):
-        self.clear_screen()
 
-        print("=" * 80)
+        if self._check_terminal_resize():
+            pass
+        clear_screen()
+
+        width, height = self.get_terminal_size()
+
+        available_lines = max(height - 10, 5)
+        max_display = min(available_lines // 4, 7)
+
+        separator = get_separator(width)
+        print(separator)
         print("  Navigate with ↑/↓ arrows")
-        print("=" * 80)
+        print(separator)
         print()
 
         if not self.jobs:
@@ -53,47 +108,65 @@ class JobPicker:
             return
 
         start_idx = max(0, self.current_index - 2)
-        end_idx = min(len(self.jobs), start_idx + self.max_display)
+        end_idx = min(len(self.jobs), start_idx + max_display)
 
-        if (
-            end_idx - start_idx < self.max_display
-            and len(self.jobs) >= self.max_display
-        ):
-            start_idx = max(0, end_idx - self.max_display)
+        if end_idx - start_idx < max_display and len(self.jobs) >= max_display:
+            start_idx = max(0, end_idx - max_display)
 
         visible_jobs = self.jobs[start_idx:end_idx]
+
+        url_width = max(width - 10, 30)
+        title_width = max(width - 20, 40)
+        info_width = max(width - 10, 50)
 
         for i, job in enumerate(visible_jobs):
             actual_index = start_idx + i
             job_id, title, company, site, location, url, status = job
 
-            if status == "pending":
-                color_code = "\033[1;33m"
-            else:
-                color_code = "\033[1;35m"
+            color_code = (
+                Colors.BOLD_YELLOW if status == "pending" else Colors.BOLD_MAGENTA
+            )
+
+            title_display = truncate_text(title, title_width)
+            url_display = truncate_text(url, url_width)
+            info_display = truncate_text(f"{company} | {site} | {location}", info_width)
 
             if actual_index == self.current_index:
                 print(
-                    f"  → {color_code}[{actual_index + 1}/{len(self.jobs)}] {title}\033[0m"
+                    f"  → {colorize(f'[{actual_index + 1}/{len(self.jobs)}] {title_display}', color_code)}"
                 )
-                print(f"    {color_code}{company} | {site} | {location}\033[0m")
-                print(f"    \033[90m{url}\033[0m")
+                print(f"    {colorize(info_display, color_code)}")
+                print(f"    {colorize(url_display, Colors.GRAY)}")
             else:
-                print(f"    [{actual_index + 1}/{len(self.jobs)}] {title}")
-                print(f"    {company} | {site} | {location}")
-                print(f"    \033[90m{url}\033[0m")
+                print(f"    [{actual_index + 1}/{len(self.jobs)}] {title_display}")
+                print(f"    {info_display}")
+                print(f"    {colorize(url_display, Colors.GRAY)}")
             print()
 
-        _, _, _, _, _, _, status = self.jobs[self.current_index]
-        print("=" * 80)
-        footer = f"  {'WIP' if status == 'wip' else 'Pending'} job: [a] "
-        footer += "Set to WIP" if status == "pending" else "Set to applied"
-        if status == "wip":
-            footer += "\t[p] Set to pending"
-        footer += "\t[d] Discard\t\n\t\t[o] Open in browser\t[q] Quit"
+        self._display_footer(width)
 
-        print(footer)
-        print("=" * 80)
+    def _display_footer(self, width):
+        _, _, _, _, _, _, status = self.jobs[self.current_index]
+        separator = get_separator(width)
+
+        print(separator)
+
+        if width < 80:
+            action = "Set to WIP" if status == "pending" else "Set to applied"
+            print(f"  {'WIP' if status == 'wip' else 'Pending'} job")
+            print(f"  [a] {action}")
+            if status == "wip":
+                print(f"  [p] Set to pending")
+            print(f"  [d] Discard  [o] Open  [q] Quit")
+        else:
+            footer = f"  {'WIP' if status == 'wip' else 'Pending'} job: [a] "
+            footer += "Set to WIP" if status == "pending" else "Set to applied"
+            if status == "wip":
+                footer += "\t[p] Set to pending"
+            footer += "\t[d] Discard\t\n\t\t[o] Open in browser\t[q] Quit"
+            print(footer)
+
+        print(separator)
 
     def handle_action(self, action):
         if not self.jobs:
@@ -132,34 +205,6 @@ class JobPicker:
             return True
 
         return False
-
-    def run(self):
-        self.jobs = list(get_pending_jobs("DESC"))
-
-        if not self.jobs:
-            self.display_jobs()
-            self.get_key()
-            return
-
-        while True:
-            self.display_jobs()
-
-            if not self.jobs:
-                print("\n  All jobs processed!")
-                break
-
-            key = self.get_key()
-
-            if key == "q":
-                break
-            elif key == "up" or key == "k":
-                if self.current_index > 0:
-                    self.current_index -= 1
-            elif key == "down" or key == "j":
-                if self.current_index < len(self.jobs) - 1:
-                    self.current_index += 1
-            elif key in ["a", "d", "p", "o"]:
-                self.handle_action(key)
 
 
 def interactive_job_picker():
