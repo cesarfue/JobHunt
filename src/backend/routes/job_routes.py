@@ -47,8 +47,8 @@ def handle_job():
         openai = OpenAIService(content)
         extracted = openai.job_content
 
-        company = extracted.get("company", "Inconnue").title()
-        job_title = extracted.get("job_title", "Poste").title()
+        company = extracted.get("company", "").title()
+        job_title = extracted.get("job_title", "").title()
         today = datetime.now().strftime("%Y-%m-%d")
 
         folder_path = create_folder(company, today)

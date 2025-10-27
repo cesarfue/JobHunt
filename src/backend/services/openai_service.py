@@ -29,15 +29,10 @@ class OpenAIService:
             print(f"Error loading resume.json: {e}")
             return None
 
-    def query(self, prompt, include_job_content, include_resume):
+    def query(self, prompt, include_job_content):
         full_prompt = prompt
         if include_job_content:
             full_prompt = f"{prompt}\n\n## Job content\n{self.job_content}"
-        if include_resume:
-            full_prompt = f"{prompt}\n\n# Mon CV (JSON)\n\n{self.resume_json}"
-
-        if include_job_content and include_resume:
-            print(f"Query : \n{full_prompt}")
 
         response = client.chat.completions.create(
             model="gpt-4.1", messages=[{"role": "user", "content": full_prompt}]
@@ -56,7 +51,7 @@ class OpenAIService:
     Offre d'emploi:
     {content}
     """
-        response = self.query(prompt, False, False)
+        response = self.query(prompt, False)
 
         try:
             cleaned_response = clean_json(response)

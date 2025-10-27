@@ -1,5 +1,4 @@
 import json
-import shutil
 import subprocess
 from pathlib import Path
 
@@ -32,7 +31,7 @@ Retourne UNIQUEMENT un objet JSON avec la même structure que celle fournie ci-d
 
     query = flatten_resume_for_query()
     prompt = f"{score_prompt}\n\n## Éléments à noter :\n{json.dumps(query, ensure_ascii=False, indent=2)}"
-    result = openai.query(prompt, True, False)
+    result = openai.query(prompt, True)
 
     try:
         cleaned_result = clean_json(result)
