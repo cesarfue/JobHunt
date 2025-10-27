@@ -8,7 +8,6 @@ from db.db import get_all_jobs, get_applied_jobs, get_pending_jobs
 
 
 def show_all_jobs():
-    """Display all jobs with their status."""
     jobs = get_all_jobs()
     if not jobs:
         print("\nNo jobs in database!")
@@ -16,8 +15,7 @@ def show_all_jobs():
 
     table = []
     for job in jobs:
-        job_id, title, company, site, location, status = job
-        # Color code the status
+        job_id, title, company, site, location, status, score = job
         if status == "applied":
             status_display = f"\033[92m{status.upper()}\033[0m"  # Green
         elif status == "discarded":
@@ -26,7 +24,15 @@ def show_all_jobs():
             status_display = f"\033[93m{status.upper()}\033[0m"  # Yellow
 
         table.append(
-            [job_id, title[:40], company[:20], site, location[:20], status_display]
+            [
+                job_id,
+                title[:40],
+                company[:20],
+                site,
+                location[:20],
+                score,
+                status_display,
+            ]
         )
 
     print("\n" + "=" * 120)
@@ -35,7 +41,7 @@ def show_all_jobs():
     print(
         tabulate(
             table,
-            headers=["ID", "Title", "Company", "Site", "Location", "Status"],
+            headers=["ID", "Title", "Company", "Site", "Location", "Score", "Status"],
             tablefmt="fancy_grid",
         )
     )
@@ -43,7 +49,6 @@ def show_all_jobs():
 
 
 def show_stats():
-    """Show statistics about jobs."""
     all_jobs = get_all_jobs()
     applied = sum(1 for job in all_jobs if job[5] == "applied")
     discarded = sum(1 for job in all_jobs if job[5] == "discarded")

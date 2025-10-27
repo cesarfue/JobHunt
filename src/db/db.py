@@ -17,6 +17,7 @@ def init_db():
             site TEXT,
             url TEXT UNIQUE,
             job_type TEXT,
+            score REAL DEFAULT 0.0,
             scraped_at TEXT,
             status TEXT DEFAULT 'pending'
         )
@@ -33,8 +34,8 @@ def insert_jobs(jobs):
         try:
             c.execute(
                 """
-                INSERT INTO jobs (title, company, location, site, url, job_type, scraped_at, status)
-                VALUES (?, ?, ?, ?, ?, ?, datetime('now'), 'pending')
+                INSERT INTO jobs (title, company, location, site, url, job_type, score, scraped_at, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), 'pending')
             """,
                 (
                     job.get("title"),
@@ -43,6 +44,7 @@ def insert_jobs(jobs):
                     job.get("site"),
                     job.get("job_url"),
                     job.get("job_type"),
+                    job.get("score"),
                 ),
             )
         except sqlite3.IntegrityError as e:
@@ -56,7 +58,7 @@ def get_pending_jobs():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(
-        "SELECT id, title, company, site, location, url FROM jobs WHERE status='pending' ORDER BY scraped_at DESC"
+        "SELECT id, title, company, site, location, url FROM jobs WHERE status='pending' ORDER BY score DESC, scraped_at DESC"
     )
     jobs = c.fetchall()
     conn.close()
@@ -83,7 +85,7 @@ def get_applied_jobs():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(
-        "SELECT id, title, company, site, location, scraped_at FROM jobs WHERE status='applied' ORDER BY scraped_at DESC"
+        "SELECT id, title, company, site, location, scraped_at FROM jobs WHERE status='applied' ORDER BY score DESC, scraped_at DESC"
     )
     jobs = c.fetchall()
     conn.close()
@@ -94,7 +96,11 @@ def get_all_jobs():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(
-        "SELECT id, title, company, site, location, status FROM jobs ORDER BY scraped_at DESC"
+        """
+        SELECT id, title, company, site, location, status, score
+        FROM jobs
+        ORDER BY score DESC, scraped_at DESC
+        """
     )
     jobs = c.fetchall()
     conn.close()

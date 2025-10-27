@@ -22,3 +22,6 @@ app:
 
 db:
 	sqlite3 src/db/jobs.db
+
+rmdb:
+	@rm src/db/jobs.db

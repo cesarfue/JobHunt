@@ -1,6 +1,7 @@
 from jobspy import scrape_jobs
 
 from db.db import init_db, insert_jobs
+from scraper.score import retrieve_job_score
 
 
 def run_scraper():
@@ -26,15 +27,11 @@ def run_scraper():
         if col in jobs.columns
     ]
     filtered_jobs = jobs[columns_to_keep]
-
     job_dicts = filtered_jobs.to_dict(orient="records")
-
-    if not job_dicts:
-        print("No valid jobs to insert (all missing URLs).")
-        return
-
+    for job in job_dicts:
+        job["score"] = retrieve_job_score(job["title"])
+    job_dicts = [job for job in job_dicts if job["score"] > 0]
     insert_jobs(job_dicts)
-    print(f"Inserted {len(job_dicts)} jobs (duplicates ignored).")
 
 
 if __name__ == "__main__":
