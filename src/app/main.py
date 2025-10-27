@@ -3,8 +3,9 @@ import sys
 from prompt_toolkit import PromptSession
 from tabulate import tabulate
 
-from app.job_picker import interactive_job_picker, list_applications
-from db.db import get_all_jobs, get_applied_jobs, get_pending_jobs
+from app.job_picker import interactive_job_picker, list_subs
+from db.db import get_all_jobs
+from scraper.scrape import run_scraper
 
 
 def show_all_jobs():
@@ -15,7 +16,7 @@ def show_all_jobs():
 
     table = []
     for job in jobs:
-        job_id, title, company, site, location, status, score = job
+        job_id, title, company, site, location, url, status = job
         if status == "applied":
             status_display = f"\033[92m{status.upper()}\033[0m"  # Green
         elif status == "discarded":
@@ -30,7 +31,7 @@ def show_all_jobs():
                 company[:20],
                 site,
                 location[:20],
-                score,
+                url[:20],
                 status_display,
             ]
         )
@@ -41,7 +42,7 @@ def show_all_jobs():
     print(
         tabulate(
             table,
-            headers=["ID", "Title", "Company", "Site", "Location", "Score", "Status"],
+            headers=["ID", "Title", "Company", "Site", "Location", "URL", "Status"],
             tablefmt="fancy_grid",
         )
     )
@@ -50,9 +51,9 @@ def show_all_jobs():
 
 def show_stats():
     all_jobs = get_all_jobs()
-    applied = sum(1 for job in all_jobs if job[5] == "applied")
-    discarded = sum(1 for job in all_jobs if job[5] == "discarded")
-    pending = sum(1 for job in all_jobs if job[5] == "pending")
+    applied = sum(1 for job in all_jobs if job[6].lower() == "applied")
+    discarded = sum(1 for job in all_jobs if job[6].lower() == "discarded")
+    pending = sum(1 for job in all_jobs if job[6].lower() == "pending")
 
     print("\n" + "=" * 50)
     print("  JOB STATISTICS")
@@ -68,13 +69,14 @@ def main():
     session = PromptSession()
 
     print("\n" + "=" * 60)
-    print("  Welcome to JobHunter Interactive Shell!")
+    print("  OverengineeredJobSearch Interactive Shell!")
     print("=" * 60)
     print("\n  Available commands:")
     print("    start          - Start reviewing pending jobs")
-    print("    applications   - List all applied jobs")
+    print("    subs           - List all applied jobs")
     print("    list           - Show all jobs with status")
     print("    stats          - Show job statistics")
+    print("    fetch          - Fetch new jobs")
     print("    exit           - Quit the application")
     print()
 
@@ -93,14 +95,17 @@ def main():
         elif cmd == "start":
             interactive_job_picker()
 
-        elif cmd == "applications":
-            list_applications()
+        elif cmd == "subs":
+            list_subs()
 
         elif cmd == "list":
             show_all_jobs()
 
         elif cmd == "stats":
             show_stats()
+
+        elif cmd == "fetch":
+            run_scraper()
 
         else:
             print(

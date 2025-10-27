@@ -47,22 +47,10 @@ def insert_jobs(jobs):
                     job.get("score"),
                 ),
             )
-        except sqlite3.IntegrityError as e:
-            print(f"Error inserting jobs : {e}")
+        except sqlite3.IntegrityError:
             pass
     conn.commit()
     conn.close()
-
-
-def get_pending_jobs():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute(
-        "SELECT id, title, company, site, location, url FROM jobs WHERE status='pending' ORDER BY score DESC, scraped_at DESC"
-    )
-    jobs = c.fetchall()
-    conn.close()
-    return jobs
 
 
 def mark_job_as_applied(job_id):
@@ -81,11 +69,22 @@ def mark_job_as_discarded(job_id):
     conn.close()
 
 
+def get_pending_jobs():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute(
+        "SELECT id, title, company, site, location, url FROM jobs WHERE status='pending' ORDER BY score DESC, scraped_at DESC"
+    )
+    jobs = c.fetchall()
+    conn.close()
+    return jobs
+
+
 def get_applied_jobs():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(
-        "SELECT id, title, company, site, location, scraped_at FROM jobs WHERE status='applied' ORDER BY score DESC, scraped_at DESC"
+        "SELECT id, title, company, site, location, url FROM jobs WHERE status='applied' ORDER BY score DESC, scraped_at DESC"
     )
     jobs = c.fetchall()
     conn.close()
@@ -97,9 +96,9 @@ def get_all_jobs():
     c = conn.cursor()
     c.execute(
         """
-        SELECT id, title, company, site, location, status, score
+        SELECT id, title, company, site, location, url, status
         FROM jobs
-        ORDER BY score DESC, scraped_at DESC
+        ORDER BY status DESC, score DESC, scraped_at DESC
         """
     )
     jobs = c.fetchall()

@@ -166,7 +166,7 @@ class JobPicker:
                 self.handle_action(key)
 
 
-def list_applications():
+def list_subs():
     from tabulate import tabulate
 
     jobs = get_applied_jobs()
@@ -181,7 +181,7 @@ def list_applications():
         table.append([job_id, title, company, site, location, scraped_at])
 
     print("\n" + "=" * 100)
-    print("  MY APPLICATIONS")
+    print("  SUBS ")
     print("=" * 100 + "\n")
     print(
         tabulate(
@@ -204,6 +204,6 @@ def interactive_job_picker():
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "list":
-        list_applications()
+        list_subs()
     else:
         interactive_job_picker()

@@ -22,8 +22,8 @@
     </dict>
 
     <key>StandardOutPath</key>
-    <string>/tmp/jobhunter.log</string>
+    <string>/tmp/jobsearch.log</string>
     <key>StandardErrorPath</key>
-    <string>/tmp/jobhunter.error.log</string>
+    <string>/tmp/jobsearch.error.log</string>
 </dict>
 </plist>
