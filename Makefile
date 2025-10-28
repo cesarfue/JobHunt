@@ -10,11 +10,11 @@ resume:
 
 backend:
 	@echo "Starting Flask backend..."
-	@cd backend && source ./.venv/bin/activate && python app.py
+	source ./.venv/bin/activate && cd backend && python app.py
 
 board:
 	@echo "Starting lazyboard..."
-	@cd lazyboard && source ./.venv/bin/activate && PYTHONPATH=. python -m app.main
+	source ./.venv/bin/activate && cd lazyboard && PYTHONPATH=. python -m app.main
 
 db:
 	sqlite3 lazyboard/db/jobs.db

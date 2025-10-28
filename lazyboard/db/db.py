@@ -16,10 +16,11 @@ def init_db():
             location TEXT,
             site TEXT,
             url TEXT UNIQUE,
-            job_type TEXT,
+            type TEXT,
             score REAL DEFAULT 0.0,
             date_added TEXT,
-            status TEXT DEFAULT 'pending'
+            status TEXT DEFAULT 'pending',
+            description TEXT
         )
     """
     )
@@ -35,8 +36,8 @@ def insert_jobs(jobs):
         try:
             c.execute(
                 """
-                INSERT INTO jobs (title, company, location, site, url, job_type, score, date_added, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, date('now'), 'pending')
+                INSERT INTO jobs (title, company, location, site, url, type, score, description, date_added, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, date('now'), 'pending')
             """,
                 (
                     job.get("title"),
@@ -46,6 +47,7 @@ def insert_jobs(jobs):
                     url,
                     job.get("job_type"),
                     job.get("score"),
+                    job.get("description"),
                 ),
             )
         except sqlite3.IntegrityError:
@@ -54,34 +56,34 @@ def insert_jobs(jobs):
     conn.close()
 
 
-def mark_job_as_applied(job_id):
+def mark_job_as_applied(id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("UPDATE jobs SET status='applied' WHERE id=?", (job_id,))
+    c.execute("UPDATE jobs SET status='applied' WHERE id=?", (id,))
     conn.commit()
     conn.close()
 
 
-def mark_job_as_wip(job_id):
+def mark_job_as_wip(id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("UPDATE jobs SET status='wip' WHERE id=?", (job_id,))
+    c.execute("UPDATE jobs SET status='wip' WHERE id=?", (id,))
     conn.commit()
     conn.close()
 
 
-def mark_job_as_discarded(job_id):
+def mark_job_as_discarded(id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("UPDATE jobs SET status='discarded' WHERE id=?", (job_id,))
+    c.execute("UPDATE jobs SET status='discarded' WHERE id=?", (id,))
     conn.commit()
     conn.close()
 
 
-def mark_job_as_pending(job_id):
+def mark_job_as_pending(id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("UPDATE jobs SET status='pending' WHERE id=?", (job_id,))
+    c.execute("UPDATE jobs SET status='pending' WHERE id=?", (id,))
     conn.commit()
     conn.close()
 

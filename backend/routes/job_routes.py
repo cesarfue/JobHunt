@@ -27,25 +27,22 @@ def handle_job():
 
     try:
         data = request.json or {}
-        url = data.get("url")
-        if not url:
-            return (
-                jsonify({"status": "error", "message": "Missing 'url' in request."}),
-                400,
-            )
-        response = requests.get(url, timeout=10)
-        if not response.ok:
-            return (
-                jsonify({"status": "error", "message": f"Failed to fetch URL: {url}"}),
-                400,
-            )
+        openai = OpenAIService()
 
-        content = extract_visible_text(response.text)
-        openai = OpenAIService(content)
-        extracted = openai.job_content
+        if data.get("description"):
+            openai.job_content = data.get("description")
+            print(f"giving description : {openai.job_content}")
+        else:
+            url = data.get("url")
+            response = requests.get(url, timeout=10)
+            if not response.ok:
+                return (
+                    jsonify({"status": "error", "message": f"Failed to fetch: {url}"}),
+                    400,
+                )
+            openai.extract_job_info(extract_visible_text(response.text))
 
-        company = extracted.get("company", "").title()
-        job_title = extracted.get("job_title", "").title()
+        company = data.get("company", "")
         today = datetime.now().strftime("%Y-%m-%d")
 
         folder_path = create_folder(company, today)
@@ -53,14 +50,7 @@ def handle_job():
         make_letter(folder_path)
         open_folder_in_explorer(folder_path)
 
-        return jsonify(
-            {
-                "status": "success",
-                "folderPath": folder_path,
-                "company": company,
-                "jobTitle": job_title,
-            }
-        )
+        return jsonify({"status": "success"})
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500

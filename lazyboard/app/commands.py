@@ -19,15 +19,19 @@ API_URL = "http://127.0.0.1:5000/api/job"
 
 
 def apply_to_job(job):
-    job_id, title, company, site, location, url, status = job
+    id, title, company, url, description = job
     print(f"\nApplying to {company} - {title}...")
 
     try:
-        response = requests.post(API_URL, json={"url": url}, timeout=60)
+        response = requests.post(
+            API_URL,
+            json={"url": url, "description": description, "company": company},
+            timeout=60,
+        )
         if response.status_code != 200:
             return False
 
-        mark_job_as_wip(job_id)
+        mark_job_as_wip(id)
         return True
 
     except requests.exceptions.RequestException as e:
@@ -36,15 +40,15 @@ def apply_to_job(job):
 
 
 def discard_job(job):
-    job_id = job[0]
-    mark_job_as_discarded(job_id)
+    id = job[0]
+    mark_job_as_discarded(id)
     print(f"Job discarded")
 
 
-def open_job_url(job_id: int):
+def open_job_url(id: int):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT url FROM jobs WHERE id = ?", (job_id,))
+    c.execute("SELECT url FROM jobs WHERE id = ?", (id,))
     row = c.fetchone()
     conn.close()
 
@@ -52,7 +56,7 @@ def open_job_url(job_id: int):
         url = row[0]
         webbrowser.open(url)
     else:
-        print(f"No job found with id {job_id}")
+        print(f"No job found with id {id}")
 
 
 def show_all_jobs():
@@ -98,12 +102,12 @@ def show_all_jobs():
 
     table = []
     for job in jobs:
-        job_id, title, company, site, location, date_added, status = job
+        id, title, company, site, location, date_added, status = job
 
         row = []
         for col_name, _ in visible_columns:
             if col_name == "id":
-                row.append(job_id)
+                row.append(id)
             elif col_name == "title":
                 row.append(truncate_text(title, widths["title"]))
             elif col_name == "company":

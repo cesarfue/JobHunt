@@ -15,9 +15,8 @@ client = OpenAI(api_key=API_KEY)
 
 class OpenAIService:
 
-    def __init__(self, job_content):
+    def __init__(self):
         self.load_resume_data()
-        self.extract_job_info(job_content)
 
     def load_resume_data(self):
         try:
@@ -45,9 +44,6 @@ class OpenAIService:
         prompt = f"""
     À partir du texte de page web ci-dessous, retourne uniquement en JSON, sans aucune autre information:
     {{
-    "company": "Nom de la société qui poste l'offre d'emploi",
-    "job_title": "Intitulé du poste",
-    "platform": "Plateforme d'offres d'emploi, en un mot (ex: Hellowork, Welcometothejungle, etc)",
     "job_description": "Contenu de l'offre d'emploi et du profil recherché"
     }}
     Offre d'emploi:
@@ -66,4 +62,4 @@ class OpenAIService:
                     self.job_content = json.loads(json_str)
                 except Exception as e:
                     print(f"Still not valid JSON: {e}")
-            raise ValueError(f"Invalid JSON returned by model: {response}")
+        raise ValueError(f"Invalid JSON returned by model: {response}")

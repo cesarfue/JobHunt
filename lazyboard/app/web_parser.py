@@ -2,7 +2,6 @@ from time import sleep
 
 import requests
 from bs4 import BeautifulSoup
-
 from db.db import insert_jobs
 from scraper.score import retrieve_job_score
 
@@ -65,7 +64,7 @@ def parse_generic(html, url):
             location = el.get_text(strip=True)
             break
 
-    job_type = (
+    type = (
         (soup.find("span", class_="job-type") or {}).get_text(strip=True)
         if soup.find("span", class_="job-type")
         else ""
@@ -78,8 +77,8 @@ def parse_generic(html, url):
         "company": company,
         "location": location,
         "site": "other",
-        "job_url": url,
-        "job_type": job_type,
+        "url": url,
+        "type": type,
         "score": score,
     }
 
@@ -169,15 +168,15 @@ def parse_hellowork(html, url):
             break
 
     company = ""
-    job_title_h1 = soup.find("h1", id="main-content")
-    if job_title_h1:
-        company_tag = job_title_h1.find("a", href=True, title=True)
+    title_h1 = soup.find("h1", id="main-content")
+    if title_h1:
+        company_tag = title_h1.find("a", href=True, title=True)
         if company_tag:
             company = company_tag.get_text(strip=True)
 
     location = ""
-    if job_title_h1:
-        next_ul = job_title_h1.find_next("ul")
+    if title_h1:
+        next_ul = title_h1.find_next("ul")
         if next_ul:
             first_li = next_ul.find("li")
             if first_li:
@@ -193,8 +192,8 @@ def build_job_dict(title, company, location, site, url):
         "company": company,
         "location": location,
         "site": site,
-        "job_url": url,
-        "job_type": "",
+        "url": url,
+        "type": "",
         "score": score,
     }
 

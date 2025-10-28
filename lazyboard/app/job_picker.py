@@ -121,7 +121,7 @@ class JobPicker:
 
         for i, job in enumerate(visible_jobs):
             actual_index = start_idx + i
-            job_id, title, company, site, location, url, status = job
+            id, title, company, site, location, url, status = job
 
             color_code = (
                 Colors.BOLD_YELLOW if status == "pending" else Colors.BOLD_MAGENTA

@@ -20,9 +20,18 @@ def run_scraper():
         print("No jobs found.")
         return
 
+    print(jobs.columns)
     columns_to_keep = [
         col
-        for col in ["title", "company", "job_type", "site", "location", "job_url"]
+        for col in [
+            "title",
+            "company",
+            "location",
+            "site",
+            "job_url",
+            "job_type",
+            "description",
+        ]
         if col in jobs.columns
     ]
     filtered_jobs = jobs[columns_to_keep]

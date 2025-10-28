@@ -43,3 +43,4 @@ backend/Lettre de motivation César Fuentes.docx
 lazyboard/db/jobs.db
 resume/.vite/deps
 resume/node_modules
+.venv
