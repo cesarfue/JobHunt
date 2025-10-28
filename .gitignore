@@ -44,3 +44,10 @@ lazyboard/db/jobs.db
 resume/.vite/deps
 resume/node_modules
 .venv
+lazyboard/src/__pycache__
+lazyboard/src/config/__pycache__
+lazyboard/src/models/__pycache__
+lazyboard/src/repository/__pycache__
+lazyboard/src/scrapers/__pycache__
+lazyboard/src/services/__pycache__
+lazyboard/src/tui/__pycache__

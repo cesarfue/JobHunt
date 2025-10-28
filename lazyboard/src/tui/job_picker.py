@@ -2,8 +2,8 @@ import sys
 import termios
 import tty
 
-from app.commands import apply_to_job, discard_job, open_job_url
-from app.ui_utils import (
+from src.services.job_service import JobService
+from src.tui.ui_utils import (
     Colors,
     clear_screen,
     colorize,
@@ -11,17 +11,18 @@ from app.ui_utils import (
     get_terminal_size,
     truncate_text,
 )
-from db.db import get_pending_jobs, mark_job_as_applied, mark_job_as_pending
 
 
 class JobPicker:
-    def __init__(self):
+
+    def __init__(self, job_service: JobService):
+        self.job_service = job_service
         self.jobs = []
         self.current_index = 0
         self._last_terminal_size = None
 
     def _check_terminal_resize(self):
-        current_size = self.get_terminal_size()
+        current_size = get_terminal_size()
         if self._last_terminal_size is None:
             self._last_terminal_size = current_size
             return False
@@ -30,12 +31,8 @@ class JobPicker:
             return True
         return False
 
-    @staticmethod
-    def get_terminal_size():
-        return get_terminal_size()
-
     def run(self):
-        self.jobs = list(get_pending_jobs("DESC"))
+        self.jobs = self.job_service.get_pending_jobs("DESC")
 
         if not self.jobs:
             self.display_jobs()
@@ -79,18 +76,12 @@ class JobPicker:
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-    def update_status(self, status):
-        current_job = list(self.jobs[self.current_index])
-        current_job[6] = status
-        self.jobs[self.current_index] = current_job
-
     def display_jobs(self):
-
         if self._check_terminal_resize():
             pass
         clear_screen()
 
-        width, height = self.get_terminal_size()
+        width, height = get_terminal_size()
 
         available_lines = max(height - 10, 5)
         max_display = min(available_lines // 4, 7)
@@ -121,15 +112,14 @@ class JobPicker:
 
         for i, job in enumerate(visible_jobs):
             actual_index = start_idx + i
-            id, title, company, site, location, url, status = job
 
-            color_code = (
-                Colors.BOLD_YELLOW if status == "pending" else Colors.BOLD_MAGENTA
+            color_code = Colors.BOLD_YELLOW if job.is_pending else Colors.BOLD_MAGENTA
+
+            title_display = truncate_text(job.title, title_width)
+            url_display = truncate_text(job.url, url_width)
+            info_display = truncate_text(
+                f"{job.company} | {job.site} | {job.location}", info_width
             )
-
-            title_display = truncate_text(title, title_width)
-            url_display = truncate_text(url, url_width)
-            info_display = truncate_text(f"{company} | {site} | {location}", info_width)
 
             if actual_index == self.current_index:
                 print(
@@ -146,22 +136,22 @@ class JobPicker:
         self._display_footer(width)
 
     def _display_footer(self, width):
-        _, _, _, _, _, _, status = self.jobs[self.current_index]
+        current_job = self.jobs[self.current_index]
         separator = get_separator(width)
 
         print(separator)
 
         if width < 80:
-            action = "Set to WIP" if status == "pending" else "Set to applied"
-            print(f"  {'WIP' if status == 'wip' else 'Pending'} job")
+            action = "Set to WIP" if current_job.is_pending else "Set to applied"
+            print(f"  {'WIP' if current_job.is_wip else 'Pending'} job")
             print(f"  [a] {action}")
-            if status == "wip":
+            if current_job.is_wip:
                 print(f"  [p] Set to pending")
             print(f"  [d] Discard  [o] Open  [q] Quit")
         else:
-            footer = f"  {'WIP' if status == 'wip' else 'Pending'} job: [a] "
-            footer += "Set to WIP" if status == "pending" else "Set to applied"
-            if status == "wip":
+            footer = f"  {'WIP' if current_job.is_wip else 'Pending'} job: [a] "
+            footer += "Set to WIP" if current_job.is_pending else "Set to applied"
+            if current_job.is_wip:
                 footer += "\t[p] Set to pending"
             footer += "\t[d] Discard\t\n\t\t[o] Open in browser\t[q] Quit"
             print(footer)
@@ -173,47 +163,36 @@ class JobPicker:
             return False
 
         current_job = self.jobs[self.current_index]
-        _, _, _, _, _, _, status = self.jobs[self.current_index]
 
-        if status == "pending":
-            if action == "a":
-                apply_to_job(current_job)
-                self.update_status("wip")
+        if action == "a":
+            if current_job.is_pending:
+                self.job_service.apply_to_job(current_job)
+                self.jobs[self.current_index] = self.job_service.get_job(current_job.id)
                 return True
-
-        elif status == "wip":
-            if action == "a":
-                mark_job_as_applied(current_job[0])
-                self.update_status("applied")
+            elif current_job.is_wip:
+                self.job_service.mark_as_applied(current_job.id)
                 self.jobs.pop(self.current_index)
                 if self.current_index >= len(self.jobs) and self.current_index > 0:
                     self.current_index -= 1
                 return True
-            elif action == "p":
-                mark_job_as_pending(current_job[0])
-                self.update_status("pending")
 
-        if action == "o":
-            open_job_url(current_job[0])
+        elif action == "p" and current_job.is_wip:
+            self.job_service.mark_as_pending(current_job.id)
+            self.jobs[self.current_index] = self.job_service.get_job(current_job.id)
+            return True
+
+        elif action == "o":
+            import webbrowser
+
+            webbrowser.open(current_job.url)
             return True
 
         elif action == "d":
-            discard_job(current_job)
+            self.job_service.mark_as_discarded(current_job.id)
+            print(f"Job discarded")
             self.jobs.pop(self.current_index)
             if self.current_index >= len(self.jobs) and self.current_index > 0:
                 self.current_index -= 1
             return True
 
         return False
-
-
-def interactive_job_picker():
-    try:
-        picker = JobPicker()
-        picker.run()
-    except KeyboardInterrupt:
-        sys.exit(0)
-
-
-if __name__ == "__main__":
-    interactive_job_picker()

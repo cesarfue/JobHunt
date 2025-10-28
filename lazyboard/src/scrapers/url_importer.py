@@ -2,8 +2,9 @@ from time import sleep
 
 import requests
 from bs4 import BeautifulSoup
-from db.db import insert_jobs
-from scraper.score import retrieve_job_score
+from src.models.job import Job
+from src.services.job_service import JobService
+from src.services.score_service import retrieve_job_score
 
 
 def fetch_job_page(url):
@@ -14,7 +15,7 @@ def fetch_job_page(url):
             "Chrome/126.0.0.0 Safari/537.36"
         ),
         "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Referer": "https://www.google.com/",
         "DNT": "1",
         "Connection": "keep-alive",
@@ -45,7 +46,6 @@ def parse_job_html(html, url):
 
 def parse_generic(html, url):
     soup = BeautifulSoup(html, "html.parser")
-
     title = (soup.find("h1") or {}).get_text(strip=True) if soup.find("h1") else ""
 
     company = ""
@@ -64,23 +64,16 @@ def parse_generic(html, url):
             location = el.get_text(strip=True)
             break
 
-    type = (
-        (soup.find("span", class_="job-type") or {}).get_text(strip=True)
-        if soup.find("span", class_="job-type")
-        else ""
-    )
-
     score = retrieve_job_score(title)
 
-    return {
-        "title": title,
-        "company": company,
-        "location": location,
-        "site": "other",
-        "url": url,
-        "type": type,
-        "score": score,
-    }
+    return Job(
+        title=title,
+        company=company,
+        location=location,
+        site="other",
+        url=url,
+        score=score,
+    )
 
 
 def parse_linkedin(html, url):
@@ -104,7 +97,15 @@ def parse_linkedin(html, url):
             location = el.get_text(strip=True)
             break
 
-    return build_job_dict(title, company, location, "linkedin", url)
+    score = retrieve_job_score(title)
+    return Job(
+        title=title,
+        company=company,
+        location=location,
+        site="linkedin",
+        url=url,
+        score=score,
+    )
 
 
 def parse_indeed(html, url):
@@ -125,7 +126,15 @@ def parse_indeed(html, url):
             location = el.get_text(strip=True)
             break
 
-    return build_job_dict(title, company, location, "indeed", url)
+    score = retrieve_job_score(title)
+    return Job(
+        title=title,
+        company=company,
+        location=location,
+        site="indeed",
+        url=url,
+        score=score,
+    )
 
 
 def parse_wttj(html, url):
@@ -150,7 +159,15 @@ def parse_wttj(html, url):
             if location_span:
                 location = location_span.get_text(strip=True)
 
-    return build_job_dict(title, company, location, "welcometothejungle", url)
+    score = retrieve_job_score(title)
+    return Job(
+        title=title,
+        company=company,
+        location=location,
+        site="welcometothejungle",
+        url=url,
+        score=score,
+    )
 
 
 def parse_hellowork(html, url):
@@ -182,27 +199,29 @@ def parse_hellowork(html, url):
             if first_li:
                 location = first_li.get_text(strip=True)
 
-    return build_job_dict(title, company, location, "hellowork", url)
-
-
-def build_job_dict(title, company, location, site, url):
     score = retrieve_job_score(title)
-    return {
-        "title": title,
-        "company": company,
-        "location": location,
-        "site": site,
-        "url": url,
-        "type": "",
-        "score": score,
-    }
+    return Job(
+        title=title,
+        company=company,
+        location=location,
+        site="hellowork",
+        url=url,
+        score=score,
+    )
 
 
-def add_job_entry(url):
+def add_job_from_url(url: str, job_service: JobService):
     html = fetch_job_page(url)
     if not html:
         print(f"Failed to fetch job page: {url}")
         return False
+
     job = parse_job_html(html, url)
-    insert_jobs([job])
-    return True
+    saved_job = job_service.add_job(job)
+
+    if saved_job.id:
+        print(f"Job added: {saved_job.title} at {saved_job.company}")
+        return True
+    else:
+        print("Failed to add job")
+        return False

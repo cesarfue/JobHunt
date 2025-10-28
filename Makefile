@@ -14,7 +14,7 @@ backend:
 
 board:
 	@echo "Starting lazyboard..."
-	source ./.venv/bin/activate && cd lazyboard && PYTHONPATH=. python -m app.main
+	source ./.venv/bin/activate && cd lazyboard && PYTHONPATH=. python -m src
 
 db:
 	sqlite3 lazyboard/db/jobs.db

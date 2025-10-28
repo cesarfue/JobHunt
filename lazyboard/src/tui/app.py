@@ -1,10 +1,11 @@
 from prompt_toolkit import PromptSession
 
-from app.commands import open_job_url, show_all_jobs, show_stats
-from app.job_picker import interactive_job_picker
-from app.ui_utils import get_separator, get_terminal_size
-from app.web_parser import add_job_entry
-from scraper.scrape import run_scraper
+from src.scrapers.scraper_commands import run_scraper
+from src.scrapers.url_importer import add_job_from_url
+from src.services.job_service import JobService
+from src.tui.commands import CommandHandler
+from src.tui.job_picker import JobPicker
+from src.tui.ui_utils import get_separator, get_terminal_size
 
 
 def display_welcome():
@@ -12,7 +13,7 @@ def display_welcome():
     separator = get_separator(min(width, 60))
 
     print("\n" + separator)
-    print("  OverengineeredJobSearch Interactive Shell!")
+    print("  Lazyboard - Job Application Tracker")
     print(separator)
     print("\n  Available commands:")
     print("    start          - Start reviewing pending jobs")
@@ -26,6 +27,9 @@ def display_welcome():
 
 
 def main():
+    job_service = JobService()
+    command_handler = CommandHandler(job_service)
+
     session = PromptSession()
     display_welcome()
 
@@ -44,21 +48,25 @@ def main():
             break
 
         elif cmd == "start":
-            interactive_job_picker()
+            picker = JobPicker(job_service)
+            try:
+                picker.run()
+            except KeyboardInterrupt:
+                pass
 
         elif cmd == "list":
-            show_all_jobs()
+            command_handler.show_all_jobs()
 
         elif cmd == "stats":
-            show_stats()
+            command_handler.show_stats()
 
         elif cmd == "fetch":
-            run_scraper()
+            run_scraper(job_service)
 
         elif cmd.startswith("add"):
             parts = cmd.split(maxsplit=1)
             if len(parts) == 2:
-                add_job_entry(parts[1])
+                add_job_from_url(parts[1], job_service)
             else:
                 print("Usage: add <url>")
 
@@ -67,14 +75,16 @@ def main():
             if len(parts) == 2:
                 try:
                     job_id = int(parts[1])
-                    open_job_url(job_id)
+                    command_handler.open_job_url(job_id)
                 except ValueError:
                     print("Invalid job ID. Must be a number.")
             else:
                 print("Usage: open <job_id>")
 
         else:
-            print("Unknown command. Type 'exit' for available commands or see above.")
+            print(
+                "Unknown command. Available: start, list, stats, fetch, add, open, exit"
+            )
 
 
 if __name__ == "__main__":
