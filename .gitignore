@@ -51,3 +51,7 @@ lazyboard/src/repository/__pycache__
 lazyboard/src/scrapers/__pycache__
 lazyboard/src/services/__pycache__
 lazyboard/src/tui/__pycache__
+
+# Custom resume configurations (user-specific)
+custom.json
+resume/public/custom.json

@@ -1,6 +1,5 @@
 import type { Basics } from "../types/ResumeTypes";
 import Github from "../assets/icons/github.png";
-import Location from "../assets/icons/location.png";
 import Phone from "../assets/icons/telephone.png";
 import Mail from "../assets/icons/mail.png";
 
